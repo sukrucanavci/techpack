@@ -1,47 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:techpack/mainpage.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MaterialApp(home: MyApp()));
+}
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+class _MyAppState extends State<MyApp> {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'tech pack',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'tech pack'),
-    );
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(seconds: 4), () {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Mainpage()));
+    });
   }
-}
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
+      body: Stack(
+        fit:StackFit.expand,
+        children: <Widget>[
+          Container(
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage("assets/splash.png"),
+                    fit: BoxFit.cover)),
 
-        child: Column(
+          child:Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children:<Widget> [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(50, 500, 10, 50)), //or const EdgeInsets.all(280.0),),
+                CircularProgressIndicator(
+                  color:Colors.deepPurple,
+                ),
+            ],
+          ),
+          )
+        ],
+    ),
 
-        ),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
