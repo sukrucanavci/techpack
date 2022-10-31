@@ -73,26 +73,6 @@ class ProductSearchDelegate extends SearchDelegate {
                   color: Colors.white),
               child: Column(
                 children: [
-                  cart.any(((product) => product.id == result.id))
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: const [
-                            Icon(
-                              Icons.check_circle_outline,
-                              size: 20,
-                              color: Colors.deepPurple,
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              "In your cart",
-                              style: TextStyle(
-                                  color: Colors.deepPurple, fontSize: 12),
-                            )
-                          ],
-                        )
-                      : const SizedBox.shrink(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -134,13 +114,39 @@ class ProductSearchDelegate extends SearchDelegate {
                           ),
                         ],
                       ),
-                      Container(
-                        height: 30,
-                        width: 60,
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage(vendorLogo!),
-                                fit: BoxFit.contain)),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          cart.any(((product) => product.id == result.id))
+                              ? Row(
+                                  children: const [
+                                    Icon(
+                                      Icons.check_circle_outline,
+                                      size: 20,
+                                      color: Colors.deepPurple,
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      "In your cart",
+                                      style: TextStyle(
+                                          color: Colors.deepPurple,
+                                          fontSize: 12),
+                                    )
+                                  ],
+                                )
+                              : const SizedBox(height: 20),
+                          Container(
+                            margin: const EdgeInsets.only(top:10),
+                            height: 30,
+                            width: 60,
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: AssetImage(vendorLogo!),
+                                    fit: BoxFit.contain)),
+                          ),
+                        ],
                       )
                     ],
                   ),
@@ -188,26 +194,6 @@ class ProductSearchDelegate extends SearchDelegate {
                   color: Colors.white),
               child: Column(
                 children: [
-                  cart.any(((product) => product.id == result.id))
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: const [
-                            Icon(
-                              Icons.check_circle_outline,
-                              size: 20,
-                              color: Colors.deepPurple,
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              "In your cart",
-                              style: TextStyle(
-                                  color: Colors.deepPurple, fontSize: 12),
-                            )
-                          ],
-                        )
-                      : const SizedBox.shrink(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -249,13 +235,39 @@ class ProductSearchDelegate extends SearchDelegate {
                           ),
                         ],
                       ),
-                      Container(
-                        height: 30,
-                        width: 60,
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage(vendorLogo!),
-                                fit: BoxFit.contain)),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          cart.any(((product) => product.id == result.id))
+                              ? Row(
+                                  children: const [
+                                    Icon(
+                                      Icons.check_circle_outline,
+                                      size: 20,
+                                      color: Colors.deepPurple,
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      "In your cart",
+                                      style: TextStyle(
+                                          color: Colors.deepPurple,
+                                          fontSize: 12),
+                                    )
+                                  ],
+                                )
+                              : const SizedBox(height: 20),
+                          Container(
+                            margin: const EdgeInsets.only(top:10),
+                            height: 30,
+                            width: 60,
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: AssetImage(vendorLogo!),
+                                    fit: BoxFit.contain)),
+                          ),
+                        ],
                       )
                     ],
                   ),

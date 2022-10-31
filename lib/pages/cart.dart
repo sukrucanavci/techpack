@@ -31,13 +31,7 @@ class _CartState extends State<Cart> {
       cartCopy = [...widget.cart];
     });
 
-    _updateUtils();
-  }
-
-  void _updateUtils() {
-    
     setState(() {
-      quantityMap.clear();
       cartCopy.forEach((productInCart) {
         if (quantityMap.keys
             .where((product) => product.id == productInCart.id)
@@ -53,7 +47,6 @@ class _CartState extends State<Cart> {
       });
     });
 
-    total = 0;
     setState(() {
       quantityMap.keys.forEach((product) {
         total += product.price * quantityMap[product]!;
@@ -62,8 +55,16 @@ class _CartState extends State<Cart> {
   }
 
   void _addToCart(ProductModel product) {
+    widget.addToCart(product);
+
     setState(() {
       cartCopy.add(product);
+      total += product.price;
+      quantityMap.keys.forEach((prod) {
+        if (prod.id == product.id) {
+          quantityMap[product] = quantityMap[product]! + 1;
+        }
+      });
     });
   }
 
@@ -72,14 +73,25 @@ class _CartState extends State<Cart> {
         cartCopy.indexWhere((productInCart) => productInCart.id == product.id);
 
     setState(() {
+      widget.removeFromCart(product);
       cartCopy.removeAt(index);
+      total -= product.price;
+      if (cartCopy.where((prod) => prod.id == product.id).isEmpty) {
+        quantityMap.removeWhere((key, value) => key.id == product.id);
+      } else {
+        quantityMap.keys.forEach((prod) {
+          if (prod.id == product.id) {
+            quantityMap[product] = quantityMap[product]! - 1;
+          }
+        });
+      }
     });
   }
 
   Widget _buildCard(MapEntry<ProductModel, int> entry) {
     return Container(
-        margin: EdgeInsets.only(left: 15, top: 15, right: 15, bottom: 5),
-        padding: EdgeInsets.all(10),
+        margin: const EdgeInsets.only(left: 15, top: 15, right: 15, bottom: 5),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             boxShadow: [
@@ -89,25 +101,7 @@ class _CartState extends State<Cart> {
                   blurRadius: 5)
             ],
             color: Colors.white),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Container(
-                    height: 40,
-                    width: 60,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image:
-                                AssetImage(widget.logoMap[entry.key.vendor]!),
-                            fit: BoxFit.contain)),
-                  ),
-                ],
-              ),
-            ),
+        child: 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -147,16 +141,26 @@ class _CartState extends State<Cart> {
                     ),
                   )
                 ]),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                Column(
                   children: [
+                    Container(
+                      height: 40,
+                      width: 60,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image:
+                                  AssetImage(widget.logoMap[entry.key.vendor]!),
+                              fit: BoxFit.contain)),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
                     IconButton(
                         onPressed: () {
-                          setState(() {
-                            widget.removeFromCart(entry.key);
-                            _removeFromCart(entry.key);
-                            _updateUtils();
-                          });
+                          _removeFromCart(entry.key);
                         },
                         icon: const Icon(Icons.remove_circle_outline,
                             color: Colors.purple)),
@@ -169,16 +173,12 @@ class _CartState extends State<Cart> {
                     ),
                     IconButton(
                         onPressed: () {
-                          setState(() {
-                            widget.addToCart(entry.key);
-                            _addToCart(entry.key);
-                            _updateUtils();
-                          });
+                          _addToCart(entry.key);
                         },
                         icon: const Icon(Icons.add_circle_outline,
                             color: Colors.purple))
-                  ],
-                )
+                      ],
+                    )
               ],
             )
           ],
