@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:techpack/models/product_model.dart';
+import 'package:techpack/pages/routes.dart';
 
 class Cart extends StatefulWidget {
   final List<ProductModel> cart;
@@ -215,7 +216,13 @@ class _CartState extends State<Cart> {
             Container(
               margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
               child: FloatingActionButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MyHomePage(title: "tech pack"),
+                      ));
+                },
                 backgroundColor: Colors.deepPurple,
                 child: const Icon(Icons.map_outlined),
               ),
