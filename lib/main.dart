@@ -2,9 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:techpack/mainpage.dart';
 
 void main() {
-  runApp(MaterialApp(home: MyApp()));
+  runApp(MaterialApp(
+      title: "tech pack",
+      theme: ThemeData(
+          primarySwatch: Colors.purple, scaffoldBackgroundColor: Colors.white),
+      home: const MyApp()));
 }
+
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -13,39 +20,36 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds:3), () {
+    Future.delayed(const Duration(seconds: 3), () {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Mainpage()));
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
-        fit:StackFit.expand,
+        fit: StackFit.expand,
         children: <Widget>[
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage("assets/splash.png"),
-                    fit: BoxFit.cover)),
-
-          child:Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children:<Widget> [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(50, 500, 10, 50)), //or const EdgeInsets.all(280.0),),
+                    image: AssetImage("assets/splash.png"), fit: BoxFit.cover)),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: const <Widget>[
+                Padding(
+                    padding: EdgeInsets.fromLTRB(
+                        50, 500, 10, 50)), //or const EdgeInsets.all(280.0),),
                 CircularProgressIndicator(
-                  color:Colors.deepPurple,
+                  color: Colors.deepPurple,
                 ),
-            ],
-          ),
+              ],
+            ),
           )
         ],
-    ),
-
+      ),
     );
   }
 }
