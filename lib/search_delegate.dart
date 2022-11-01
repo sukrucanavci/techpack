@@ -57,8 +57,6 @@ class ProductSearchDelegate extends SearchDelegate {
           itemBuilder: ((context, index) {
             ProductModel result = matchQuery[index];
 
-            final vendorLogo = logoMap[result.vendor];
-
             return Container(
               margin: const EdgeInsets.only(top: 15, left: 15, right: 15),
               padding: const EdgeInsets.all(10),
@@ -117,7 +115,7 @@ class ProductSearchDelegate extends SearchDelegate {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          cart.any(((product) => product.id == result.id))
+                          cart.contains(result)
                               ? Row(
                                   children: const [
                                     Icon(
@@ -138,12 +136,12 @@ class ProductSearchDelegate extends SearchDelegate {
                                 )
                               : const SizedBox(height: 20),
                           Container(
-                            margin: const EdgeInsets.only(top:10),
+                            margin: const EdgeInsets.only(top: 10),
                             height: 30,
                             width: 60,
                             decoration: BoxDecoration(
                                 image: DecorationImage(
-                                    image: AssetImage(vendorLogo!),
+                                    image: AssetImage(logoMap[result.vendor]!),
                                     fit: BoxFit.contain)),
                           ),
                         ],
@@ -178,8 +176,6 @@ class ProductSearchDelegate extends SearchDelegate {
           itemBuilder: ((context, index) {
             ProductModel result = matchQuery[index];
 
-            final vendorLogo = logoMap[result.vendor];
-
             return Container(
               margin: const EdgeInsets.only(top: 15, left: 15, right: 15),
               padding: const EdgeInsets.all(10),
@@ -238,7 +234,7 @@ class ProductSearchDelegate extends SearchDelegate {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          cart.any(((product) => product.id == result.id))
+                          cart.contains(result)
                               ? Row(
                                   children: const [
                                     Icon(
@@ -259,12 +255,12 @@ class ProductSearchDelegate extends SearchDelegate {
                                 )
                               : const SizedBox(height: 20),
                           Container(
-                            margin: const EdgeInsets.only(top:10),
+                            margin: const EdgeInsets.only(top: 10),
                             height: 30,
                             width: 60,
                             decoration: BoxDecoration(
                                 image: DecorationImage(
-                                    image: AssetImage(vendorLogo!),
+                                    image: AssetImage(logoMap[result.vendor]!),
                                     fit: BoxFit.contain)),
                           ),
                         ],

@@ -20,7 +20,6 @@ class Cart extends StatefulWidget {
 
 class _CartState extends State<Cart> {
   Map<ProductModel, int> quantityMap = {};
-  List<ProductModel> cartCopy = [];
   num total = 0;
 
   @override
@@ -28,62 +27,38 @@ class _CartState extends State<Cart> {
     super.initState();
 
     setState(() {
-      cartCopy = [...widget.cart];
-    });
-
-    setState(() {
-      cartCopy.forEach((productInCart) {
-        if (quantityMap.keys
-            .where((product) => product.id == productInCart.id)
-            .isEmpty) {
+      widget.cart.forEach((productInCart) {
+        if (!quantityMap.containsKey(productInCart)) {
           quantityMap[productInCart] = 1;
         } else {
-          quantityMap.keys.forEach((product) {
-            if (product.id == productInCart.id) {
-              quantityMap[product] = quantityMap[product]! + 1;
-            }
-          });
+          quantityMap[productInCart] = quantityMap[productInCart]! + 1;
         }
       });
-    });
 
-    setState(() {
       quantityMap.keys.forEach((product) {
         total += product.price * quantityMap[product]!;
       });
     });
   }
 
-  void _addToCart(ProductModel product) {
+  void _addToQuantity(ProductModel product) {
     widget.addToCart(product);
 
     setState(() {
-      cartCopy.add(product);
       total += product.price;
-      quantityMap.keys.forEach((prod) {
-        if (prod.id == product.id) {
-          quantityMap[product] = quantityMap[product]! + 1;
-        }
-      });
+      quantityMap[product] = quantityMap[product]! + 1;
     });
   }
 
-  void _removeFromCart(ProductModel product) {
-    final int index =
-        cartCopy.indexWhere((productInCart) => productInCart.id == product.id);
+  void _removeFromQuantity(ProductModel product) {
+    widget.removeFromCart(product);
 
     setState(() {
-      widget.removeFromCart(product);
-      cartCopy.removeAt(index);
       total -= product.price;
-      if (cartCopy.where((prod) => prod.id == product.id).isEmpty) {
-        quantityMap.removeWhere((key, value) => key.id == product.id);
+      if (quantityMap[product] == 1) {
+        quantityMap.remove(product);
       } else {
-        quantityMap.keys.forEach((prod) {
-          if (prod.id == product.id) {
-            quantityMap[product] = quantityMap[product]! - 1;
-          }
-        });
+        quantityMap[product] = quantityMap[product]! - 1;
       }
     });
   }
@@ -101,66 +76,64 @@ class _CartState extends State<Cart> {
                   blurRadius: 5)
             ],
             color: Colors.white),
-        child: 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(children: [
-                  Container(
-                    height: 85,
-                    width: 85,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage(entry.key.image),
-                            fit: BoxFit.contain)),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(left: 10),
-                    width: 150,
-                    child: Column(
-                      children: [
-                        Text(
-                          entry.key.title,
-                          style: const TextStyle(
-                              color: Colors.deepPurple, fontSize: 14),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          "${entry.key.price} ₺",
-                          style: const TextStyle(
-                              color: Colors.deepPurple,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 15),
-                      ],
-                    ),
-                  )
-                ]),
-                Column(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(children: [
+              Container(
+                height: 85,
+                width: 85,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage(entry.key.image),
+                        fit: BoxFit.contain)),
+              ),
+              Container(
+                padding: EdgeInsets.only(left: 10),
+                width: 150,
+                child: Column(
                   children: [
-                    Container(
-                      height: 40,
-                      width: 60,
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image:
-                                  AssetImage(widget.logoMap[entry.key.vendor]!),
-                              fit: BoxFit.contain)),
+                    Text(
+                      entry.key.title,
+                      style: const TextStyle(
+                          color: Colors.deepPurple, fontSize: 14),
+                      textAlign: TextAlign.center,
                     ),
                     const SizedBox(
                       height: 10,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
+                    Text(
+                      "${entry.key.price} ₺",
+                      style: const TextStyle(
+                          color: Colors.deepPurple,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 15),
+                  ],
+                ),
+              )
+            ]),
+            Column(
+              children: [
+                Container(
+                  height: 40,
+                  width: 60,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage(widget.logoMap[entry.key.vendor]!),
+                          fit: BoxFit.contain)),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
                     IconButton(
                         onPressed: () {
-                          _removeFromCart(entry.key);
+                          _removeFromQuantity(entry.key);
                         },
                         icon: const Icon(Icons.remove_circle_outline,
                             color: Colors.purple)),
@@ -173,12 +146,12 @@ class _CartState extends State<Cart> {
                     ),
                     IconButton(
                         onPressed: () {
-                          _addToCart(entry.key);
+                          _addToQuantity(entry.key);
                         },
                         icon: const Icon(Icons.add_circle_outline,
                             color: Colors.purple))
-                      ],
-                    )
+                  ],
+                )
               ],
             )
           ],

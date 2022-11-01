@@ -12,12 +12,9 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
-
   Widget _buildCard(ProductModel product, context) {
     final productInfo = ProductInfo.of(context);
 
-    final vendorLogo=productInfo.logoMap[product.vendor];
- 
     return Padding(
         padding: const EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 5),
         child: Container(
@@ -36,14 +33,17 @@ class _ProductPageState extends State<ProductPage> {
                   padding: const EdgeInsets.all(5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: [Container(
-                      height:30 ,
-                      width:60,
+                    children: [
+                      Container(
+                        height: 30,
+                        width: 60,
                         decoration: BoxDecoration(
                             image: DecorationImage(
-                                image: AssetImage(vendorLogo!),
+                                image: AssetImage(
+                                    productInfo.logoMap[product.vendor]!),
                                 fit: BoxFit.contain)),
-                    ),],
+                      ),
+                    ],
                   ),
                 ),
                 Container(
@@ -79,8 +79,7 @@ class _ProductPageState extends State<ProductPage> {
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        if (productInfo.cart.any((productInCart) =>
-                            productInCart.id == product.id)) ...[
+                        if (productInfo.cart.contains(product)) ...[
                           IconButton(
                               onPressed: () {
                                 productInfo.removeFromCart(product);

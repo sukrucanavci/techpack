@@ -25,7 +25,7 @@ class Categories extends StatefulWidget {
   const Categories({super.key});
 
   @override
-  State<Categories> createState() =>  _CategoriesState();
+  State<Categories> createState() => _CategoriesState();
 }
 
 class _CategoriesState extends State<Categories> {
@@ -61,11 +61,8 @@ class _CategoriesState extends State<Categories> {
   }
 
   void _removeFromCart(ProductModel product) {
-    final int index =
-        _cart.indexWhere((productInCart) => productInCart.id == product.id);
-
     setState(() {
-      _cart.removeAt(index);
+      _cart.remove(product);
       _cart = [..._cart];
     });
   }
