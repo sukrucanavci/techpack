@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class SepetEsyasi extends StatefulWidget {
+class RouteCard extends StatefulWidget {
   final String tutar;
   final String mesafe;
   final bool yuksekMi;
 
-  const SepetEsyasi(
+  const RouteCard(
       {Key? key,
       required this.tutar,
       required this.mesafe,
@@ -13,14 +13,16 @@ class SepetEsyasi extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<SepetEsyasi> createState() => _nameState();
+  State<RouteCard> createState() => _nameState();
 }
 
-class _nameState extends State<SepetEsyasi> {
+class _nameState extends State<RouteCard> {
   bool selected = false;
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
@@ -63,7 +65,10 @@ class _nameState extends State<SepetEsyasi> {
                 ),
                 Expanded(
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 24,
+                    ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -73,7 +78,7 @@ class _nameState extends State<SepetEsyasi> {
                           children: [
                             Text('Toplam Tutar'),
                             Container(
-                              width: 11,
+                              width: width * 0.3,
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -90,7 +95,7 @@ class _nameState extends State<SepetEsyasi> {
                           children: [
                             Text('Toplam Mesafe'),
                             Container(
-                              width: 11,
+                              width: width * 0.3,
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
