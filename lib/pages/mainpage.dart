@@ -12,69 +12,74 @@ class _MainpageState extends State<Mainpage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      resizeToAvoidBottomInset: false,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              child: Row(
-                children: <Widget>[
-                  Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(left: 320.0, top: 50),
-                        child: IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Icons.shopping_basket,
-                                color: Colors.purple),
-                            tooltip: 'Sepeti görüntüle'),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 150),
-            Image.asset('assets/logo.jpg'),
-            Container(
-              width: 300.0,
-              child: TextField(
-                onSubmitted: (value) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Categories()),
-                  );
-                },
-                decoration: const InputDecoration(
-                  suffixIcon: Icon(Icons.search),
-                  labelStyle: TextStyle(color: Colors.grey, fontSize: 16.0),
-                  border: GradientOutlineInputBorder(
-                      width: 3.0,
-                      borderRadius: BorderRadius.all(Radius.circular(30)),
-                      gradient: LinearGradient(
-                          colors: [Colors.deepPurpleAccent, Colors.purple])),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Center(
+                child: Row(
+                  children: <Widget>[
+                    Column(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(left: 320.0, top: 100),
+                          child: IconButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const Categories()),
+                                );
+                              },
+                              icon: const Icon(Icons.shopping_basket,
+                                  color: Colors.purple),
+                              tooltip: 'Sepeti görüntüle'),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-            ),
-            TextButton.icon(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                primary: Colors.white,
-                textStyle:
-                    const TextStyle(fontSize: 12, fontStyle: FontStyle.normal),
-                shadowColor: Colors.purple,
+              const SizedBox(height: 100),
+              Image.asset('assets/logo.jpg'),
+              Container(
+                width: 300.0,
+                child: TextField(
+                  onSubmitted: (value) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Categories()),
+                    );
+                  },
+                  decoration: const InputDecoration(
+                    suffixIcon: Icon(Icons.search),
+                    labelStyle: TextStyle(color: Colors.grey, fontSize: 16.0),
+                    border: GradientOutlineInputBorder(
+                        width: 3.0,
+                        borderRadius: BorderRadius.all(Radius.circular(30)),
+                        gradient: LinearGradient(
+                            colors: [Colors.deepPurpleAccent, Colors.purple])),
+                  ),
+                ),
               ),
-              label: const Text('Geçmiş Sepetler',
-                  style: TextStyle(color: Colors.purple)),
-              icon: const Icon(
-                Icons.shopping_basket_outlined,
-                color: Colors.purple,
+              TextButton.icon(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.white,
+                  textStyle:
+                  const TextStyle(fontSize: 12, fontStyle: FontStyle.normal),
+                  shadowColor: Colors.purple,
+                ),
+                label: const Text('Geçmiş Sepetler',
+                    style: TextStyle(color: Colors.purple)),
+                icon: const Icon(
+                  Icons.shopping_basket_outlined,
+                  color: Colors.purple,
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),),
       ),
     );
   }
