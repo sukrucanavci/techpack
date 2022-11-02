@@ -220,7 +220,7 @@ class _CartState extends State<Cart> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => MyHomePage(title: "tech pack"),
+                        builder: (context) => Routes(title: "tech pack"),
                       ));
                 },
                 backgroundColor: Colors.deepPurple,

@@ -2,33 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:techpack/components/customCard.dart';
 import 'package:techpack/pages/map.dart';
 
-/*
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'tech pack',
-      theme: ThemeData(
-        primarySwatch: Colors.purple,
-      ),
-      home: const MyHomePage(title: 'tech pack'),
-    );
-  }
-}
-*/
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class Routes extends StatefulWidget {
+  const Routes({super.key, required this.title});
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<Routes> createState() => _RoutesState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _RoutesState extends State<Routes> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,12 +26,12 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           children: [
-            SepetEsyasi(
+            RouteCard(
               tutar: "16.388 TL",
               mesafe: "3164 m",
               yuksekMi: false,
             ),
-            SepetEsyasi(
+            RouteCard(
               tutar: "18.412 TL",
               mesafe: "1596 m",
               yuksekMi: true,
