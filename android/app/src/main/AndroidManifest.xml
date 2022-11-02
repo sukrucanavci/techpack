@@ -1,5 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.iuc.techpack">
+
+        <!-- TODO: Add your Google Maps API key here -->
+    <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAZKJ7wc-s2nX73ZtEvlXZfDRWBkXTZ3nI"/>
+
    <application
         android:label="techpack"
         android:name="${applicationName}"
