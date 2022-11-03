@@ -5,7 +5,9 @@ void main() {
   runApp(MaterialApp(
       title: "tech pack",
       theme: ThemeData(
-          primarySwatch: Colors.purple, scaffoldBackgroundColor: Colors.white),
+        primarySwatch: Colors.purple,
+        scaffoldBackgroundColor: Colors.white,
+      ),
       home: const MyApp()));
 }
 
@@ -20,10 +22,13 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 3), () {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => Mainpage()));
-    });
+    Future.delayed(
+      const Duration(seconds: 3),
+      () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Mainpage()));
+      },
+    );
   }
 
   @override

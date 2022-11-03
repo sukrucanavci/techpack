@@ -4,6 +4,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:techpack/components/navbar.dart';
+
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
 
@@ -71,11 +73,17 @@ class _MapPageState extends State<MapPage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(Icons.arrow_back, color: Colors.purple),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text("Güzergah"),
+        title: Text(
+          "Rota Güzergahı",
+          style: TextStyle(
+            color: Colors.purple,
+          ),
+        ),
         centerTitle: false,
+        backgroundColor: Colors.white,
       ),
       body: GoogleMap(
         initialCameraPosition: _kGoogle,
