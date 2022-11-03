@@ -17,11 +17,17 @@ class _RoutesState extends State<Routes> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(Icons.arrow_back, color: Colors.purple),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text("Rotalar"),
+        title: Text(
+          "Rotalar",
+          style: TextStyle(
+            color: Colors.purple,
+          ),
+        ),
         centerTitle: false,
+        backgroundColor: Colors.white,
       ),
       body: Center(
         child: Column(
