@@ -30,6 +30,7 @@ class ProductInfo extends InheritedWidget {
     return oldWidget.products != products ||
         oldWidget.cart != cart ||
         oldWidget.addToCart != addToCart ||
-        oldWidget.removeFromCart != removeFromCart;
+        oldWidget.removeFromCart != removeFromCart ||
+        oldWidget.logoMap != logoMap;
   }
 }
