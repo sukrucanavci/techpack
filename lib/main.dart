@@ -1,7 +1,73 @@
 import 'package:flutter/material.dart';
 import 'package:techpack/pages/mainpage.dart';
+import 'package:sqflite/sqflite.dart';
+import 'models/stores_model.dart';
+import 'package:path/path.dart' as Path;
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final database = openDatabase(
+    Path.join(await getDatabasesPath(), 'techpack_database.db'),
+    onCreate: (db, version) {
+      return db.execute(
+        'CREATE TABLE stores(id INTEGER PRIMARY KEY, name TEXT, latitude TEXT, longitude TEXT, address TEXT)',
+      );
+    },
+    version: 1,
+  );
+
+  Future<void> insertStore(Store store) async {
+    final db = await database;
+
+    await db.insert(
+      'stores',
+      store.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<List<Store>> stores() async {
+    final db = await database;
+
+    final List<Map<String, dynamic>> maps = await db.query('stores');
+
+    return List.generate(maps.length, (i) {
+      return Store(
+        id: maps[i]['id'],
+        name: maps[i]['name'],
+        latitude: maps[i]['latitude'],
+        longitude: maps[i]['longitude'],
+        address: maps[i]['address'],
+      );
+    });
+  }
+
+  Future<void> deleteStore(int id) async {
+    final db = await database;
+
+    await db.delete(
+      'stores',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  var vatan1 = const Store(
+      id: 0,
+      name: "namasdaasde",
+      latitude: "23",
+      longitude: "34",
+      address: "address");
+
+  await insertStore(vatan1);
+
+  print(await stores()); // Prints a list that include Fido.
+
+  await deleteStore(vatan1.id);
+
+  print(await stores());
+
   runApp(MaterialApp(
       title: "tech pack",
       theme: ThemeData(

@@ -1,18 +1,32 @@
 import 'package:flutter/foundation.dart';
 
 @immutable
-class StoreModel {
+class Store {
+  final int id;
   final String name; // mağaza adı
-  final double latitude; // enlem
-  final double longitude; // boylam
+  final String latitude; // enlem
+  final String longitude; // boylam
+  final String address;
 
-  const StoreModel(
-      {required this.name, required this.latitude, required this.longitude});
+  const Store(
+      {required this.id,
+      required this.name,
+      required this.latitude,
+      required this.longitude,
+      required this.address});
 
-  factory StoreModel.fromJson(Map<String, dynamic> store) {
-    return StoreModel(
-        name: store["title"],
-        latitude: store["category"],
-        longitude: store["price"]);
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'latitude': latitude,
+      'longitude': longitude,
+      'address': address,
+    };
+  }
+
+  @override
+  String toString() {
+    return 'Store{id: $id, name: $name, latitude: $latitude, longitude: $longitude, address: $address}';
   }
 }
