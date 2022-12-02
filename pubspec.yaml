@@ -39,7 +39,8 @@ dependencies:
   gradient_borders: ^0.2.0
   google_maps_flutter: ^2.2.1
   flutter_lints: ^2.0.0
-
+  sqflite: ^2.2.1
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
