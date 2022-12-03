@@ -17,7 +17,7 @@ class _MainpageState extends State<Mainpage> {
     String url;
     if (store == "media markt") {
       url =
-          "https://www.mediamarkt.com.tr/tr/search.html?query=$query&searchProfile=onlineshop&channel=mmtrtr&outlet=1771";
+          "https://www.mediamarkt.com.tr/tr/search.html?query=$query";
     } else if (store == "teknosa") {
       url = "https://www.teknosa.com/arama/?s=$query";
     } else if (store == "itopya") {
@@ -29,491 +29,95 @@ class _MainpageState extends State<Mainpage> {
     return url;
   }
 
-  List<ProductModel> scraper(String store, dom.Document document) {
+  List<ProductModel> scraper(String store, dom.Document document, final http.Response response) {
     List<ProductModel> searchedProducts = [];
-
-    if (store == "media markt") {
-      var image = document
-          .getElementsByClassName("mm-products")[0]
-          .children[0]
-          .children[0]
-          .children[1]
-          .children[0]
-          .children[0]
-          .attributes["src"];
-
-      var image1 = document
-          .getElementsByClassName("mm-products")[0]
-          .children[0]
-          .children[1]
-          .children[1]
-          .children[0]
-          .children[0]
-          .attributes["src"];
-
-      var image2 = document
-          .getElementsByClassName("mm-products")[0]
-          .children[0]
-          .children[2]
-          .children[1]
-          .children[0]
-          .children[0]
-          .attributes["src"];
-
-      var image3 = document
-          .getElementsByClassName("mm-products")[0]
-          .children[0]
-          .children[3]
-          .children[1]
-          .children[0]
-          .children[0]
-          .attributes["src"];
-
-      var title = document
-          .getElementsByClassName("mm-products")[0]
-          .children[0]
-          .children[0]
-          .children[2]
-          .children[0]
-          .children[1]
-          .children[0];
-
-      var title1 = document
-          .getElementsByClassName("mm-products")[0]
-          .children[0]
-          .children[1]
-          .children[2]
-          .children[0]
-          .children[1]
-          .children[0];
-
-      var title2 = document
-          .getElementsByClassName("mm-products")[0]
-          .children[0]
-          .children[2]
-          .children[2]
-          .children[0]
-          .children[1]
-          .children[0];
-
-      var title3 = document
-          .getElementsByClassName("mm-products")[0]
-          .children[0]
-          .children[3]
-          .children[2]
-          .children[0]
-          .children[1]
-          .children[0];
-
-      var price = document
-          .getElementsByClassName("mm-products")[0]
-          .children[0]
-          .children[0]
-          .children[2]
-          .children[1]
-          .children[0]
-          .children[0]
-          .attributes["data-price"];
-
-      var price1 = document
-          .getElementsByClassName("mm-products")[0]
-          .children[0]
-          .children[1]
-          .children[2]
-          .children[1]
-          .children[0]
-          .children[0]
-          .attributes["data-price"];
-
-      var price2 = document
-          .getElementsByClassName("mm-products")[0]
-          .children[0]
-          .children[2]
-          .children[2]
-          .children[1]
-          .children[0]
-          .children[0]
-          .attributes["data-price"];
-
-      var price3 = document
-          .getElementsByClassName("mm-products")[0]
-          .children[0]
-          .children[3]
-          .children[2]
-          .children[1]
-          .children[0]
-          .children[0]
-          .attributes["data-price"];
-
-      searchedProducts.addAll([
-        ProductModel(
-            title: title.text,
-            category: "",
-            price: int.parse(price!),
-            vendor: "media markt",
-            id: 0,
-            image: image!),
-        ProductModel(
-            title: title1.text,
-            category: "",
-            price: int.parse(price1!),
-            vendor: "media markt",
-            id: 1,
-            image: image1!),
-        ProductModel(
-            title: title2.text,
-            category: "",
-            price: int.parse(price2!),
-            vendor: "media markt",
-            id: 2,
-            image: image2!),
-        ProductModel(
-            title: title3.text,
-            category: "",
-            price: int.parse(price3!),
-            vendor: "media markt",
-            id: 3,
-            image: image3!)
-      ]);
-    } else if (store == "itopya") {
-      var title = document
-          .getElementsByClassName("productList")[0]
-          .children[0]
-          .children[3]
-          .children[0];
-
-      var title1 = document
-          .getElementsByClassName("productList")[0]
-          .children[1]
-          .children[3]
-          .children[0];
-
-      var title2 = document
-          .getElementsByClassName("productList")[0]
-          .children[2]
-          .children[3]
-          .children[0];
-
-      var title3 = document
-          .getElementsByClassName("productList")[0]
-          .children[3]
-          .children[3]
-          .children[0];
-
-      var image = document
-          .getElementsByClassName("productList")[0]
-          .children[0]
-          .children[1]
-          .children[0]
-          .children[0]
-          .attributes["src"];
-
-      var image1 = document
-          .getElementsByClassName("productList")[0]
-          .children[1]
-          .children[1]
-          .children[0]
-          .children[0]
-          .attributes["src"];
-
-      var image2 = document
-          .getElementsByClassName("productList")[0]
-          .children[2]
-          .children[1]
-          .children[0]
-          .children[0]
-          .attributes["src"];
-
-      var image3 = document
-          .getElementsByClassName("productList")[0]
-          .children[3]
-          .children[1]
-          .children[0]
-          .children[0]
-          .attributes["src"];
-
-      var price = document
-          .getElementsByClassName("productList")[0]
-          .children[0]
-          .children[4]
-          .children[1]
-          .children[0];
-
-      var price1 = document
-          .getElementsByClassName("productList")[0]
-          .children[1]
-          .children[4]
-          .children[1]
-          .children[0];
-
-      var price2 = document
-          .getElementsByClassName("productList")[0]
-          .children[2]
-          .children[4]
-          .children[1]
-          .children[0];
-
-      var price3 = document
-          .getElementsByClassName("productList")[0]
-          .children[3]
-          .children[4]
-          .children[1]
-          .children[0];
-
-      searchedProducts.addAll([
-        ProductModel(
-            title: title.text,
-            category: "",
-            price: int.parse(price.text.trim()),
-            vendor: "itopya",
-            id: 0,
-            image: image!),
-        ProductModel(
-            title: title1.text,
-            category: "",
-            price: int.parse(price1.text.trim()),
-            vendor: "itopya",
-            id: 1,
-            image: image1!),
-        ProductModel(
-            title: title2.text,
-            category: "",
-            price: int.parse(price2.text.trim()),
-            vendor: "itopya",
-            id: 2,
-            image: image2!),
-        ProductModel(
-            title: title3.text,
-            category: "",
-            price: int.parse(price3.text.trim()),
-            vendor: "itopya",
-            id: 3,
-            image: image3!)
-      ]);
-    } else if (store == "vatan") {
-      var image = document
-          .getElementsByClassName("wrapper-product-main")[0]
-          .children[0]
-          .children[0]
-          .children[0]
-          .children[0]
-          .children[0]
-          .children[0]
-          .attributes["src"];
-
-      var image1 = document
-          .getElementsByClassName("wrapper-product-main")[0]
-          .children[0]
-          .children[1]
-          .children[0]
-          .children[0]
-          .children[0]
-          .children[0]
-          .attributes["src"];
-      var image2 = document
-          .getElementsByClassName("wrapper-product-main")[0]
-          .children[0]
-          .children[2]
-          .children[0]
-          .children[0]
-          .children[0]
-          .children[0]
-          .attributes["src"];
-      var image3 = document
-          .getElementsByClassName("wrapper-product-main")[0]
-          .children[0]
-          .children[3]
-          .children[0]
-          .children[0]
-          .children[0]
-          .children[0]
-          .attributes["src"];
-      var title = document
-          .getElementsByClassName("wrapper-product-main")[0]
-          .children[0]
-          .children[0]
-          .children[1]
-          .children[1]
-          .children[1]
-          .children[0];
-      var title1 = document
-          .getElementsByClassName("wrapper-product-main")[0]
-          .children[0]
-          .children[1]
-          .children[1]
-          .children[1]
-          .children[1]
-          .children[0];
-      var title2 = document
-          .getElementsByClassName("wrapper-product-main")[0]
-          .children[0]
-          .children[2]
-          .children[1]
-          .children[1]
-          .children[1]
-          .children[0];
-      var title3 = document
-          .getElementsByClassName("wrapper-product-main")[0]
-          .children[0]
-          .children[3]
-          .children[1]
-          .children[1]
-          .children[1]
-          .children[0];
-      var price = document
-          .getElementsByClassName("wrapper-product-main")[0]
-          .children[0]
-          .children[0]
-          .children[1]
-          .children[2]
-          .children[0];
-      var price1 = document
-          .getElementsByClassName("wrapper-product-main")[0]
-          .children[0]
-          .children[1]
-          .children[1]
-          .children[2]
-          .children[0];
-      var price2 = document
-          .getElementsByClassName("wrapper-product-main")[0]
-          .children[0]
-          .children[2]
-          .children[1]
-          .children[2]
-          .children[0];
-      var price3 = document
-          .getElementsByClassName("wrapper-product-main")[0]
-          .children[0]
-          .children[3]
-          .children[1]
-          .children[2]
-          .children[0];
-      searchedProducts.addAll([
-        ProductModel(
-            title: title.text,
-            category: "",
-            price: int.parse(price.text),
-            vendor: "vatan",
-            id: 0,
-            image: image!),
-        ProductModel(
-            title: title1.text,
-            category: "",
-            price: int.parse(price1.text),
-            vendor: "vatan",
-            id: 1,
-            image: image1!),
-        ProductModel(
-            title: title2.text,
-            category: "",
-            price: int.parse(price2.text),
-            vendor: "vatan",
-            id: 2,
-            image: image2!),
-        ProductModel(
-            title: title3.text,
-            category: "",
-            price: int.parse(price3.text),
-            vendor: "vatan",
-            id: 3,
-            image: image3!)
-      ]);
-    } else if (store == "teknosa") {
-      var image = document
-          .getElementsByClassName("products")[0]
-          .children[1]
-          .children[1]
-          .children[2]
-          .children[0]
-          .children[0]
-          .attributes["srcset"];
-
-      var image1 = document
-          .getElementsByClassName("products")[0]
-          .children[2]
-          .children[1]
-          .children[2]
-          .children[0]
-          .children[0]
-          .attributes["srcset"];
-      var image2 = document
-          .getElementsByClassName("products")[0]
-          .children[3]
-          .children[1]
-          .children[2]
-          .children[0]
-          .children[0]
-          .attributes["srcset"];
-      var image3 = document
-          .getElementsByClassName("products")[0]
-          .children[4]
-          .children[1]
-          .children[2]
-          .children[0]
-          .children[0]
-          .attributes["srcset"];
-      var title = document
-          .getElementsByClassName("products")[0]
-          .children[1]
-          .attributes["data-product-name"];
-      var title1 = document
-          .getElementsByClassName("products")[0]
-          .children[2]
-          .attributes["data-product-name"];
-      var title2 = document
-          .getElementsByClassName("products")[0]
-          .children[3]
-          .attributes["data-product-name"];
-      var title3 = document
-          .getElementsByClassName("products")[0]
-          .children[4]
-          .attributes["data-product-name"];
-      var price = document
-          .getElementsByClassName("products")[0]
-          .children[1]
-          .attributes["data-product-discounted-price"];
-      var price1 = document
-          .getElementsByClassName("products")[0]
-          .children[2]
-          .attributes["data-product-discounted-price"];
-      var price2 = document
-          .getElementsByClassName("products")[0]
-          .children[3]
-          .attributes["data-product-discounted-price"];
-      var price3 = document
-          .getElementsByClassName("products")[0]
-          .children[4]
-          .attributes["data-product-discounted-price"];
-      searchedProducts.addAll([
-        ProductModel(
-            title: title.toString(),
-            category: "",
-            price: int.parse(price!),
-            vendor: "teknosa",
-            id: 0,
-            image: image!),
-        ProductModel(
-            title: title1.toString(),
-            category: "",
-            price: int.parse(price1!),
-            vendor: "teknosa",
-            id: 1,
-            image: image1!),
-        ProductModel(
-            title: title2.toString(),
-            category: "",
-            price: int.parse(price2!),
-            vendor: "teknosa",
-            id: 2,
-            image: image2!),
-        ProductModel(
-            title: title3.toString(),
-            category: "",
-            price: int.parse(price3!),
-            vendor: "teknosa",
-            id: 3,
-            image: image3!)
-      ]);
+    dom.Document html = dom.Document.html(response.body);
+    if (store == "itopya") {
+      final titles = html
+          .querySelectorAll('div.product-body > a')
+          .map((e) => e.innerHtml.trim())
+          .toList();
+      print('Count:${titles.length}');
+      for(final title in titles)
+      {
+        debugPrint(title);
+      }
+      final urls = html
+          .querySelectorAll('div.product-header > a > img')
+          .map((e) => e.attributes['data-src'])
+          .toList();
+      print('Count:${urls.length}');
+      for(final title in urls)
+      {
+        debugPrint(title);
+      }
+      final prices = html
+          .querySelectorAll('div.product-footer > div.price > strong')
+          .map((e) => e.text)
+          .toList();
+      print('Count:${prices.length}');
+      for(final title in prices)
+      {
+        debugPrint(title);
+      }
+    }
+    else if (store == "vatan") {
+      final titles = html
+          .querySelectorAll('div.product-list__content > a > div.product-list__product-name > h3')
+          .map((e) => e.innerHtml.trim())
+          .toList();
+      print('Count:${titles.length}');
+      for(final title in titles)
+      {
+        debugPrint(title);
+      }
+      final urls = html
+          .querySelectorAll('div.product-list__image-safe > a > div > img')
+          .map((e) => e.attributes['data-src'])
+          .toList();
+      print('Count:${urls.length}');
+      for(final title in urls)
+      {
+        debugPrint(title);
+      }
+      final prices = html
+          .querySelectorAll('div.product-list__content > div.product-list__cost > span.product-list__price')
+          .map((e) => e.text)
+          .toList();
+      print('Count:${prices.length}');
+      for(final title in prices)
+      {
+        debugPrint(title);
+      }
+    }
+    else if (store == "teknosa") {
+      final titles = html
+          .querySelectorAll('#product-item > a')
+          .map((e) => e.attributes['title'])
+          .toList();
+      print('Count:${titles.length}');
+      for(final title in titles)
+      {
+        debugPrint(title);
+      }
+      final urls = html
+          .querySelectorAll('#product-item > div > div.prd-media > figure > img')
+          .map((e) => e.attributes['data-srcset'])
+          .toList();
+      print('Count:${urls.length}');
+      for(final title in urls)
+      {
+        debugPrint(title);
+      }
+      final prices = html
+          .querySelectorAll('#product-item')
+          .map((e) => e.attributes['data-product-price'])
+          .toList();
+      print('Count:${prices.length}');
+      for(final title in prices)
+      {
+        debugPrint(title);
+      }
     }
 
     return searchedProducts;
@@ -526,7 +130,7 @@ class _MainpageState extends State<Mainpage> {
     if (response.statusCode == 200) {
       var document = parser.parse(response.body);
       try {
-        List<ProductModel> products = scraper(store, document);
+        List<ProductModel> products = scraper(store, document,response);
         return products;
       } catch (e) {
         print(e);
@@ -577,17 +181,16 @@ class _MainpageState extends State<Mainpage> {
                 child: TextField(
                   onSubmitted: (value) async {
                     List<ProductModel> productList = [];
-                    //final mmResults = await extractData(value, "media markt");
                     final teknosaResults = await extractData(value, "teknosa");
                     final itopyaResults = await extractData(value, "itopya");
                     final vatanResults = await extractData(value, "vatan");
 
-                    //productList.addAll(mmResults!);
+
                     productList.addAll(teknosaResults!);
                     productList.addAll(itopyaResults!);
                     productList.addAll(vatanResults!);
 
-                    productList.map((e) => print(e.title));
+                //    productList.map((e) => print(e.title));
 
                     // ignore: use_build_context_synchronously
                     Navigator.push(
