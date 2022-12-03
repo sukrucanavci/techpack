@@ -176,7 +176,235 @@ class _MainpageState extends State<Mainpage> {
             image: image3!)
       ]);
     }
+    else if (store == "vatan") {
+        var image = document
+            .getElementsByClassName("wrapper-product-main")[0]
+            .children[0]
+            .children[0]
+            .children[0]
+            .children[0]
+            .children[0]
+            .children[0]
+            .attributes["src"];
+
+        var image1 = document
+            .getElementsByClassName("wrapper-product-main")[0]
+        .children[0]
+        .children[1]
+        .children[0]
+        .children[0]
+        .children[0]
+        .children[0]
+        .attributes["src"];
+    var image2 = document
+        .getElementsByClassName("wrapper-product-main")[0]
+        .children[0]
+        .children[2]
+        .children[0]
+        .children[0]
+        .children[0]
+        .children[0]
+        .attributes["src"];
+        var image3 = document
+            .getElementsByClassName("wrapper-product-main")[0]
+            .children[0]
+            .children[3]
+            .children[0]
+            .children[0]
+            .children[0]
+            .children[0]
+            .attributes["src"];
+        var title = document
+            .getElementsByClassName("wrapper-product-main")[0]
+            .children[0]
+            .children[0]
+            .children[1]
+            .children[1]
+            .children[1]
+            .children[0];
+        var title1 = document
+            .getElementsByClassName("wrapper-product-main")[0]
+            .children[0]
+            .children[1]
+            .children[1]
+            .children[1]
+            .children[1]
+            .children[0];
+        var title2 = document
+            .getElementsByClassName("wrapper-product-main")[0]
+            .children[0]
+            .children[2]
+            .children[1]
+            .children[1]
+            .children[1]
+            .children[0];
+        var title3 = document
+            .getElementsByClassName("wrapper-product-main")[0]
+            .children[0]
+            .children[3]
+            .children[1]
+            .children[1]
+            .children[1]
+            .children[0];
+        var price = document
+            .getElementsByClassName("wrapper-product-main")[0]
+            .children[0]
+            .children[0]
+            .children[1]
+            .children[2]
+            .children[0];
+        var price1 = document
+            .getElementsByClassName("wrapper-product-main")[0]
+            .children[0]
+            .children[1]
+            .children[1]
+            .children[2]
+            .children[0];
+        var price2 = document
+            .getElementsByClassName("wrapper-product-main")[0]
+            .children[0]
+            .children[2]
+            .children[1]
+            .children[2]
+            .children[0];
+        var price3 = document
+            .getElementsByClassName("wrapper-product-main")[0]
+            .children[0]
+            .children[3]
+            .children[1]
+            .children[2]
+            .children[0];
+        searchedProducts.addAll([
+          ProductModel(
+              title: title.text,
+              category: "",
+              price: int.parse(price.text),
+              vendor: "vatan",
+              id: 0,
+              image: image!),
+          ProductModel(
+              title: title1.text,
+              category: "",
+              price: int.parse(price1.text),
+              vendor: "vatan",
+              id: 1,
+              image: image1!),
+          ProductModel(
+              title: title2.text,
+              category: "",
+              price: int.parse(price2.text),
+              vendor: "vatan",
+              id: 2,
+              image: image2!),
+          ProductModel(
+              title: title3.text,
+              category: "",
+              price: int.parse(price3.text),
+              vendor: "vatan",
+              id: 3,
+              image: image3!)
+        ]);
+      }
+    else if (store == "teknosa") {
+      var image = document
+          .getElementsByClassName("products")[0]
+          .children[1]
+          .children[1]
+          .children[2]
+          .children[0]
+          .children[0]
+          .attributes["srcset"];
+
+      var image1 = document
+          .getElementsByClassName("products")[0]
+          .children[2]
+          .children[1]
+          .children[2]
+          .children[0]
+          .children[0]
+          .attributes["srcset"];
+      var image2 = document
+          .getElementsByClassName("products")[0]
+          .children[3]
+          .children[1]
+          .children[2]
+          .children[0]
+          .children[0]
+          .attributes["srcset"];
+      var image3 = document
+          .getElementsByClassName("products")[0]
+          .children[4]
+          .children[1]
+          .children[2]
+          .children[0]
+          .children[0]
+          .attributes["srcset"];
+      var title = document
+          .getElementsByClassName("products")[0]
+          .children[1]
+          .attributes["data-product-name"];
+      var title1 = document
+          .getElementsByClassName("products")[0]
+          .children[2]
+          .attributes["data-product-name"];
+      var title2 = document
+          .getElementsByClassName("products")[0]
+          .children[3]
+          .attributes["data-product-name"];
+      var title3 = document
+          .getElementsByClassName("products")[0]
+          .children[4]
+          .attributes["data-product-name"];
+      var price = document
+          .getElementsByClassName("products")[0]
+          .children[1]
+          .attributes["data-product-discounted-price"];
+      var price1 = document
+          .getElementsByClassName("products")[0]
+          .children[2]
+          .attributes["data-product-discounted-price"];
+      var price2 = document
+          .getElementsByClassName("products")[0]
+          .children[3]
+          .attributes["data-product-discounted-price"];
+      var price3 = document
+          .getElementsByClassName("products")[0]
+          .children[4]
+          .attributes["data-product-discounted-price"];
+      searchedProducts.addAll([
+        ProductModel(
+            title: title.toString(),
+            category: "",
+            price: int.parse(price!),
+            vendor: "teknosa",
+            id: 0,
+            image: image!),
+        ProductModel(
+            title: title1.toString(),
+            category: "",
+            price: int.parse(price1!),
+            vendor: "teknosa",
+            id: 1,
+            image: image1!),
+        ProductModel(
+            title: title2.toString(),
+            category: "",
+            price: int.parse(price2!),
+            vendor: "teknosa",
+            id: 2,
+            image: image2!),
+        ProductModel(
+            title: title3.toString(),
+            category: "",
+            price: int.parse(price3!),
+            vendor: "teknosa",
+            id: 3,
+            image: image3!)
+      ]);
+    }
+    else if (store == "itopya"){}
   }
+
 
   Future<List<String>> extractData(String query, String store) async {
     final response =
