@@ -30,7 +30,7 @@ class _MainpageState extends State<Mainpage> {
   }
 
   List<ProductModel> scraper(String store, Document document) {
-    List<ProductModel> searchedProducts=[];
+    List<ProductModel> searchedProducts = [];
 
     if (store == "media markt") {
       var image = document
@@ -159,7 +159,7 @@ class _MainpageState extends State<Mainpage> {
             price: int.parse(price1!),
             vendor: "media markt",
             id: 1,
-            image: image1!),   
+            image: image1!),
         ProductModel(
             title: title2.text,
             category: "",
@@ -175,6 +175,121 @@ class _MainpageState extends State<Mainpage> {
             id: 3,
             image: image3!)
       ]);
+    } else if (store == "itopya") {
+      var title = document
+          .getElementsByClassName("productList")[0]
+          .children[0]
+          .children[3]
+          .children[0];
+
+      var title1 = document
+          .getElementsByClassName("productList")[0]
+          .children[1]
+          .children[3]
+          .children[0];
+
+      var title2 = document
+          .getElementsByClassName("productList")[0]
+          .children[2]
+          .children[3]
+          .children[0];
+
+      var title3 = document
+          .getElementsByClassName("productList")[0]
+          .children[3]
+          .children[3]
+          .children[0];
+
+      var image = document
+          .getElementsByClassName("productList")[0]
+          .children[0]
+          .children[1]
+          .children[0]
+          .children[0]
+          .attributes["src"];
+
+      var image1 = document
+          .getElementsByClassName("productList")[0]
+          .children[1]
+          .children[1]
+          .children[0]
+          .children[0]
+          .attributes["src"];
+
+      var image2 = document
+          .getElementsByClassName("productList")[0]
+          .children[2]
+          .children[1]
+          .children[0]
+          .children[0]
+          .attributes["src"];
+
+      var image3 = document
+          .getElementsByClassName("productList")[0]
+          .children[3]
+          .children[1]
+          .children[0]
+          .children[0]
+          .attributes["src"];
+
+      var price = document
+          .getElementsByClassName("productList")[0]
+          .children[0]
+          .children[4]
+          .children[1]
+          .children[0];
+
+      var price1 = document
+          .getElementsByClassName("productList")[0]
+          .children[1]
+          .children[4]
+          .children[1]
+          .children[0];
+
+      var price2 = document
+          .getElementsByClassName("productList")[0]
+          .children[2]
+          .children[4]
+          .children[1]
+          .children[0];
+
+      var price3 = document
+          .getElementsByClassName("productList")[0]
+          .children[3]
+          .children[4]
+          .children[1]
+          .children[0];
+
+      searchedProducts.addAll([
+        ProductModel(
+            title: title.text,
+            category: "",
+            price: int.parse(price.text.trim()),
+            vendor: "itopya",
+            id: 4,
+            image: image!),
+        ProductModel(
+            title: title1.text,
+            category: "",
+            price: int.parse(price1.text.trim()),
+            vendor: "itopya",
+            id: 5,
+            image: image1!),
+        ProductModel(
+            title: title2.text,
+            category: "",
+            price: int.parse(price2.text.trim()),
+            vendor: "itopya",
+            id: 6,
+            image: image2!),
+        ProductModel(
+            title: title3.text,
+            category: "",
+            price: int.parse(price3.text.trim()),
+            vendor: "itopya",
+            id: 7,
+            image: image3!)
+      ]);
     }
   }
 
@@ -184,7 +299,9 @@ class _MainpageState extends State<Mainpage> {
 
     if (response.statusCode == 200) {
       var document = parser.parse(response.body);
-      try {} catch (e) {
+      try {
+        
+      } catch (e) {
         return ['', '', 'ERROR!'];
       }
     } else {
