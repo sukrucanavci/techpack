@@ -53,21 +53,6 @@ void main() async {
     );
   }
 
-  var vatan1 = const Store(
-      id: 0,
-      name: "namasdaasde",
-      latitude: "23",
-      longitude: "34",
-      address: "address");
-
-  await insertStore(vatan1);
-
-  print(await stores()); // Prints a list that include Fido.
-
-  await deleteStore(vatan1.id);
-
-  print(await stores());
-
   runApp(MaterialApp(
       title: "tech pack",
       theme: ThemeData(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gradient_borders/gradient_borders.dart';
-import 'package:html/dom.dart';
+import 'package:html/dom.dart' as dom;
 import 'package:techpack/pages/categories.dart';
 import 'package:html/parser.dart' as parser;
 import 'package:http/http.dart' as http;
@@ -29,7 +29,7 @@ class _MainpageState extends State<Mainpage> {
     return url;
   }
 
-  List<ProductModel> scraper(String store, Document document) {
+  List<ProductModel> scraper(String store, dom.Document document) {
     List<ProductModel> searchedProducts = [];
 
     if (store == "media markt") {
@@ -266,161 +266,159 @@ class _MainpageState extends State<Mainpage> {
             category: "",
             price: int.parse(price.text.trim()),
             vendor: "itopya",
-            id: 4,
+            id: 0,
             image: image!),
         ProductModel(
             title: title1.text,
             category: "",
             price: int.parse(price1.text.trim()),
             vendor: "itopya",
-            id: 5,
+            id: 1,
             image: image1!),
         ProductModel(
             title: title2.text,
             category: "",
             price: int.parse(price2.text.trim()),
             vendor: "itopya",
-            id: 6,
+            id: 2,
             image: image2!),
         ProductModel(
             title: title3.text,
             category: "",
             price: int.parse(price3.text.trim()),
             vendor: "itopya",
-            id: 7,
+            id: 3,
             image: image3!)
       ]);
-    }
-    else if (store == "vatan") {
-        var image = document
-            .getElementsByClassName("wrapper-product-main")[0]
-            .children[0]
-            .children[0]
-            .children[0]
-            .children[0]
-            .children[0]
-            .children[0]
-            .attributes["src"];
+    } else if (store == "vatan") {
+      var image = document
+          .getElementsByClassName("wrapper-product-main")[0]
+          .children[0]
+          .children[0]
+          .children[0]
+          .children[0]
+          .children[0]
+          .children[0]
+          .attributes["src"];
 
-        var image1 = document
-            .getElementsByClassName("wrapper-product-main")[0]
-        .children[0]
-        .children[1]
-        .children[0]
-        .children[0]
-        .children[0]
-        .children[0]
-        .attributes["src"];
-    var image2 = document
-        .getElementsByClassName("wrapper-product-main")[0]
-        .children[0]
-        .children[2]
-        .children[0]
-        .children[0]
-        .children[0]
-        .children[0]
-        .attributes["src"];
-        var image3 = document
-            .getElementsByClassName("wrapper-product-main")[0]
-            .children[0]
-            .children[3]
-            .children[0]
-            .children[0]
-            .children[0]
-            .children[0]
-            .attributes["src"];
-        var title = document
-            .getElementsByClassName("wrapper-product-main")[0]
-            .children[0]
-            .children[0]
-            .children[1]
-            .children[1]
-            .children[1]
-            .children[0];
-        var title1 = document
-            .getElementsByClassName("wrapper-product-main")[0]
-            .children[0]
-            .children[1]
-            .children[1]
-            .children[1]
-            .children[1]
-            .children[0];
-        var title2 = document
-            .getElementsByClassName("wrapper-product-main")[0]
-            .children[0]
-            .children[2]
-            .children[1]
-            .children[1]
-            .children[1]
-            .children[0];
-        var title3 = document
-            .getElementsByClassName("wrapper-product-main")[0]
-            .children[0]
-            .children[3]
-            .children[1]
-            .children[1]
-            .children[1]
-            .children[0];
-        var price = document
-            .getElementsByClassName("wrapper-product-main")[0]
-            .children[0]
-            .children[0]
-            .children[1]
-            .children[2]
-            .children[0];
-        var price1 = document
-            .getElementsByClassName("wrapper-product-main")[0]
-            .children[0]
-            .children[1]
-            .children[1]
-            .children[2]
-            .children[0];
-        var price2 = document
-            .getElementsByClassName("wrapper-product-main")[0]
-            .children[0]
-            .children[2]
-            .children[1]
-            .children[2]
-            .children[0];
-        var price3 = document
-            .getElementsByClassName("wrapper-product-main")[0]
-            .children[0]
-            .children[3]
-            .children[1]
-            .children[2]
-            .children[0];
-        searchedProducts.addAll([
-          ProductModel(
-              title: title.text,
-              category: "",
-              price: int.parse(price.text),
-              vendor: "vatan",
-              id: 0,
-              image: image!),
-          ProductModel(
-              title: title1.text,
-              category: "",
-              price: int.parse(price1.text),
-              vendor: "vatan",
-              id: 1,
-              image: image1!),
-          ProductModel(
-              title: title2.text,
-              category: "",
-              price: int.parse(price2.text),
-              vendor: "vatan",
-              id: 2,
-              image: image2!),
-          ProductModel(
-              title: title3.text,
-              category: "",
-              price: int.parse(price3.text),
-              vendor: "vatan",
-              id: 3,
-              image: image3!)
-        ]);
-      }
-    else if (store == "teknosa") {
+      var image1 = document
+          .getElementsByClassName("wrapper-product-main")[0]
+          .children[0]
+          .children[1]
+          .children[0]
+          .children[0]
+          .children[0]
+          .children[0]
+          .attributes["src"];
+      var image2 = document
+          .getElementsByClassName("wrapper-product-main")[0]
+          .children[0]
+          .children[2]
+          .children[0]
+          .children[0]
+          .children[0]
+          .children[0]
+          .attributes["src"];
+      var image3 = document
+          .getElementsByClassName("wrapper-product-main")[0]
+          .children[0]
+          .children[3]
+          .children[0]
+          .children[0]
+          .children[0]
+          .children[0]
+          .attributes["src"];
+      var title = document
+          .getElementsByClassName("wrapper-product-main")[0]
+          .children[0]
+          .children[0]
+          .children[1]
+          .children[1]
+          .children[1]
+          .children[0];
+      var title1 = document
+          .getElementsByClassName("wrapper-product-main")[0]
+          .children[0]
+          .children[1]
+          .children[1]
+          .children[1]
+          .children[1]
+          .children[0];
+      var title2 = document
+          .getElementsByClassName("wrapper-product-main")[0]
+          .children[0]
+          .children[2]
+          .children[1]
+          .children[1]
+          .children[1]
+          .children[0];
+      var title3 = document
+          .getElementsByClassName("wrapper-product-main")[0]
+          .children[0]
+          .children[3]
+          .children[1]
+          .children[1]
+          .children[1]
+          .children[0];
+      var price = document
+          .getElementsByClassName("wrapper-product-main")[0]
+          .children[0]
+          .children[0]
+          .children[1]
+          .children[2]
+          .children[0];
+      var price1 = document
+          .getElementsByClassName("wrapper-product-main")[0]
+          .children[0]
+          .children[1]
+          .children[1]
+          .children[2]
+          .children[0];
+      var price2 = document
+          .getElementsByClassName("wrapper-product-main")[0]
+          .children[0]
+          .children[2]
+          .children[1]
+          .children[2]
+          .children[0];
+      var price3 = document
+          .getElementsByClassName("wrapper-product-main")[0]
+          .children[0]
+          .children[3]
+          .children[1]
+          .children[2]
+          .children[0];
+      searchedProducts.addAll([
+        ProductModel(
+            title: title.text,
+            category: "",
+            price: int.parse(price.text),
+            vendor: "vatan",
+            id: 0,
+            image: image!),
+        ProductModel(
+            title: title1.text,
+            category: "",
+            price: int.parse(price1.text),
+            vendor: "vatan",
+            id: 1,
+            image: image1!),
+        ProductModel(
+            title: title2.text,
+            category: "",
+            price: int.parse(price2.text),
+            vendor: "vatan",
+            id: 2,
+            image: image2!),
+        ProductModel(
+            title: title3.text,
+            category: "",
+            price: int.parse(price3.text),
+            vendor: "vatan",
+            id: 3,
+            image: image3!)
+      ]);
+    } else if (store == "teknosa") {
       var image = document
           .getElementsByClassName("products")[0]
           .children[1]
@@ -517,23 +515,24 @@ class _MainpageState extends State<Mainpage> {
             image: image3!)
       ]);
     }
-    else if (store == "itopya"){}
+
+    return searchedProducts;
   }
 
-
-  Future<List<String>> extractData(String query, String store) async {
+  Future<List<ProductModel>?> extractData(String query, String store) async {
     final response =
         await http.Client().get(Uri.parse(queryBuilder(query, store)));
 
     if (response.statusCode == 200) {
       var document = parser.parse(response.body);
       try {
-        
+        List<ProductModel> products = scraper(store, document);
+        return products;
       } catch (e) {
-        return ['', '', 'ERROR!'];
+        print(e);
       }
     } else {
-      return ['', '', 'ERROR: ${response.statusCode}.'];
+      print('ERROR: ${response.statusCode}.');
     }
   }
 
@@ -576,7 +575,21 @@ class _MainpageState extends State<Mainpage> {
               Container(
                 width: 300.0,
                 child: TextField(
-                  onSubmitted: (value) {
+                  onSubmitted: (value) async {
+                    List<ProductModel> productList = [];
+                    //final mmResults = await extractData(value, "media markt");
+                    final teknosaResults = await extractData(value, "teknosa");
+                    final itopyaResults = await extractData(value, "itopya");
+                    final vatanResults = await extractData(value, "vatan");
+
+                    //productList.addAll(mmResults!);
+                    productList.addAll(teknosaResults!);
+                    productList.addAll(itopyaResults!);
+                    productList.addAll(vatanResults!);
+
+                    productList.map((e) => print(e.title));
+
+                    // ignore: use_build_context_synchronously
                     Navigator.push(
                       context,
                       MaterialPageRoute(
