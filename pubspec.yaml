@@ -40,6 +40,8 @@ dependencies:
   google_maps_flutter: ^2.2.1
   flutter_lints: ^2.0.0
   sqflite: ^2.2.1
+  http: ^0.13.5
+  html: ^0.15.1
   
 dev_dependencies:
   flutter_test:
