@@ -51,9 +51,11 @@ class _CategoriesState extends State<Categories> {
       setState(() {
         _products=widget.searchedProducts;
       });
-      _products!.forEach((e) => print(
+     /* _products!.forEach((e) => print(
           "Ürün Adı : ${e.title}\nKategori : ${e.category}\nÜrün fiyatı : ${e.price}\nSatıcı : ${e.vendor}\nID : ${e.id}\nÜrün görseli : ${e.image} "));
+    */
     }
+
   }
 
   void _getProducts() async {
@@ -103,3 +105,7 @@ class _CategoriesState extends State<Categories> {
     );
   }
 }
+
+
+
+

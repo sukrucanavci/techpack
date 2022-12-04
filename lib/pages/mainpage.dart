@@ -3,6 +3,7 @@ import 'package:gradient_borders/gradient_borders.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:techpack/pages/categories.dart';
 import 'package:http/http.dart' as http;
+import 'package:techpack/pages/pastBaskets.dart';
 import '../models/product_model.dart';
 import 'dart:math';
 
@@ -87,7 +88,8 @@ class _MainpageState extends State<Mainpage> {
           .map((e) {
         String price = e.innerHtml.trim();
         String formattedPrice = price.substring(0, price.indexOf(","));
-        return formattedPrice;
+        String formattedPrice2 = formattedPrice.replaceAll(".", "");
+        return formattedPrice2;
       }).toList();
 
       images = html
@@ -128,36 +130,11 @@ class _MainpageState extends State<Mainpage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+      body: Center(
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Center(
-                child: Row(
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(left: 320.0, top: 100),
-                          child: IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const Categories(content: "categories",searchedProducts: [],)),
-                                );
-                              },
-                              icon: const Icon(Icons.shopping_basket,
-                                  color: Colors.purple),
-                              tooltip: 'Sepeti görüntüle'),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
               const SizedBox(height: 100),
               Image.asset('assets/logo.jpg'),
               Container(
@@ -173,10 +150,10 @@ class _MainpageState extends State<Mainpage> {
                     allResults.addAll(itopyaResults!);
                     allResults.addAll(vatanResults!);
 
-                    /*
+
                     allResults.forEach((e) => print(
                         "Ürün Adı : ${e.title}\nKategori : ${e.category}\nÜrün fiyatı : ${e.price}\nSatıcı : ${e.vendor}\nID : ${e.id}\nÜrün görseli : ${e.image} "));
-                    */
+
 
                     // ignore: use_build_context_synchronously
                     Navigator.push(
@@ -196,21 +173,55 @@ class _MainpageState extends State<Mainpage> {
                   ),
                 ),
               ),
-              TextButton.icon(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
-                  textStyle: const TextStyle(
-                      fontSize: 12, fontStyle: FontStyle.normal),
-                  shadowColor: Colors.purple,
+              Center(
+                    child:Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        TextButton.icon(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const pastBaskets()),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.white,
+                            textStyle: const TextStyle(
+                                fontSize: 12, fontStyle: FontStyle.normal),
+                            shadowColor: Colors.purple,
+                          ),
+                          label: const Text('Past Baskets',
+                              style: TextStyle(color: Colors.purple)),
+                          icon: const Icon(
+                            Icons.shopping_basket_outlined,
+                            color: Colors.purple,
+                          ),
+                        ),
+                        TextButton.icon(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Categories(content: "categories",searchedProducts: [],)),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.white,
+                            textStyle: const TextStyle(
+                                fontSize: 12, fontStyle: FontStyle.normal),
+                            shadowColor: Colors.purple,
+                          ),
+                          label: const Text('Categories',
+                              style: TextStyle(color: Colors.purple)),
+                          icon: const Icon(
+                            Icons.dehaze,
+                            color: Colors.purple,
+                          ),
+                        ),
+                      ],
+                    )
                 ),
-                label: const Text('Geçmiş Sepetler',
-                    style: TextStyle(color: Colors.purple)),
-                icon: const Icon(
-                  Icons.shopping_basket_outlined,
-                  color: Colors.purple,
-                ),
-              ),
             ],
           ),
         ),
