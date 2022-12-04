@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:gradient_borders/gradient_borders.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:techpack/pages/categories.dart';
-import 'package:html/parser.dart' as parser;
 import 'package:http/http.dart' as http;
-
 import '../models/product_model.dart';
+import 'dart:math';
 
 class Mainpage extends StatefulWidget {
   @override
@@ -13,14 +12,13 @@ class Mainpage extends StatefulWidget {
 }
 
 class _MainpageState extends State<Mainpage> {
-  String queryBuilder(String query, String store) {
+
+  String queryBuilder(String query, String vendor) {
     String url;
-    if (store == "media markt") {
-      url =
-          "https://www.mediamarkt.com.tr/tr/search.html?query=$query";
-    } else if (store == "teknosa") {
+
+    if(vendor == "teknosa") {
       url = "https://www.teknosa.com/arama/?s=$query";
-    } else if (store == "itopya") {
+    } else if (vendor == "itopya") {
       url = "https://www.itopya.com/AramaSonuclari?text=$query";
     } else {
       url = "https://www.vatanbilgisayar.com/arama/$query/";
@@ -29,115 +27,101 @@ class _MainpageState extends State<Mainpage> {
     return url;
   }
 
-  List<ProductModel> scraper(String store, dom.Document document, final http.Response response) {
+  List<ProductModel> scraper(String vendor, http.Response response) {
+    List<String>? titles, prices, images;
+    Random rnd = Random();
     List<ProductModel> searchedProducts = [];
     dom.Document html = dom.Document.html(response.body);
-    if (store == "itopya") {
-      final titles = html
-          .querySelectorAll('div.product-body > a')
-          .map((e) => e.innerHtml.trim())
+
+    if (vendor == "teknosa") {
+      titles = html
+          .querySelectorAll('#product-item > a.prd-link')
+          .take(4)
+          .map((e) => e.attributes['title']!)
           .toList();
-      print('Count:${titles.length}');
-      for(final title in titles)
-      {
-        debugPrint(title);
-      }
-      final urls = html
-          .querySelectorAll('div.product-header > a > img')
-          .map((e) => e.attributes['data-src'])
-          .toList();
-      print('Count:${urls.length}');
-      for(final title in urls)
-      {
-        debugPrint(title);
-      }
-      final prices = html
-          .querySelectorAll('div.product-footer > div.price > strong')
-          .map((e) => e.text)
-          .toList();
-      print('Count:${prices.length}');
-      for(final title in prices)
-      {
-        debugPrint(title);
-      }
-    }
-    else if (store == "vatan") {
-      final titles = html
-          .querySelectorAll('div.product-list__content > a > div.product-list__product-name > h3')
-          .map((e) => e.innerHtml.trim())
-          .toList();
-      print('Count:${titles.length}');
-      for(final title in titles)
-      {
-        debugPrint(title);
-      }
-      final urls = html
-          .querySelectorAll('div.product-list__image-safe > a > div > img')
-          .map((e) => e.attributes['data-src'])
-          .toList();
-      print('Count:${urls.length}');
-      for(final title in urls)
-      {
-        debugPrint(title);
-      }
-      final prices = html
-          .querySelectorAll('div.product-list__content > div.product-list__cost > span.product-list__price')
-          .map((e) => e.text)
-          .toList();
-      print('Count:${prices.length}');
-      for(final title in prices)
-      {
-        debugPrint(title);
-      }
-    }
-    else if (store == "teknosa") {
-      final titles = html
-          .querySelectorAll('#product-item > a')
-          .map((e) => e.attributes['title'])
-          .toList();
-      print('Count:${titles.length}');
-      for(final title in titles)
-      {
-        debugPrint(title);
-      }
-      final urls = html
-          .querySelectorAll('#product-item > div > div.prd-media > figure > img')
-          .map((e) => e.attributes['data-srcset'])
-          .toList();
-      print('Count:${urls.length}');
-      for(final title in urls)
-      {
-        debugPrint(title);
-      }
-      final prices = html
+
+      prices = html
           .querySelectorAll('#product-item')
-          .map((e) => e.attributes['data-product-price'])
+          .take(4)
+          .map((e) => e.attributes['data-product-price']!)
           .toList();
-      print('Count:${prices.length}');
-      for(final title in prices)
-      {
-        debugPrint(title);
-      }
+
+      images = html
+          .querySelectorAll(
+          '#product-item > div > div.prd-media > figure > img')
+          .take(4)
+          .map((e) => e.attributes['data-srcset']!)
+          .toList();
+    } else if (vendor == "vatan bilgisayar") {
+      titles = html
+          .querySelectorAll(
+          "div.product-list__content > a > div.product-list__product-name > h3")
+          .take(4)
+          .map((e) => e.innerHtml.trim())
+          .toList();
+
+      prices = html
+          .querySelectorAll(
+          "div.product-list__content > div.product-list__cost > span.product-list__price")
+          .take(4)
+          .map((e) => e.innerHtml.trim())
+          .toList();
+
+      images = html
+          .querySelectorAll(
+          "div.product-list__image-safe > a > div:nth-child(1) > img")
+          .take(4)
+          .map((e) => e.attributes["data-src"]!)
+          .toList();
+    } else if (vendor == "itopya") {
+      titles = html
+          .querySelectorAll("#productList > div.product > div.product-body > a")
+          .take(4)
+          .map((e) => e.innerHtml.trim())
+          .toList();
+
+      prices = html
+          .querySelectorAll(
+          "#productList > div.product > div.product-footer > div.price > strong")
+          .take(4)
+          .map((e) {
+        String price = e.innerHtml.trim();
+        String formattedPrice = price.substring(0, price.indexOf(","));
+        return formattedPrice;
+      }).toList();
+
+      images = html
+          .querySelectorAll(
+          "#productList > div.product > div.product-header > a.image > img")
+          .take(4)
+          .map((e) => e.attributes["data-src"]!)
+          .toList();
+    }
+
+    for (int i = 0; i < 4; i++) {
+      searchedProducts.add(ProductModel(
+          title: titles![i],
+          category: "search",
+          price: double.parse(prices![i]),
+          vendor: vendor,
+          id: rnd.nextInt(10000),
+          image: images![i]));
     }
 
     return searchedProducts;
   }
 
-  Future<List<ProductModel>?> extractData(String query, String store) async {
-    final response =
-        await http.Client().get(Uri.parse(queryBuilder(query, store)));
+  Future<List<ProductModel>> extractData(String query, String vendor) async {
+    List<ProductModel> products = [];
+    final response = await http.get(Uri.parse(queryBuilder(query, vendor)));
 
     if (response.statusCode == 200) {
-      var document = parser.parse(response.body);
-      try {
-        List<ProductModel> products = scraper(store, document,response);
-        return products;
-      } catch (e) {
-        print(e);
-      }
-    } else {
-      print('ERROR: ${response.statusCode}.');
+      products = scraper(vendor, response);
+      return products;
     }
+
+    print('Error: ${response.statusCode}.');
+    return products;
   }
 
   @override
@@ -162,7 +146,7 @@ class _MainpageState extends State<Mainpage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const Categories()),
+                                      builder: (context) => const Categories(content: "categories",searchedProducts: [],)),
                                 );
                               },
                               icon: const Icon(Icons.shopping_basket,
@@ -180,23 +164,25 @@ class _MainpageState extends State<Mainpage> {
                 width: 300.0,
                 child: TextField(
                   onSubmitted: (value) async {
-                    List<ProductModel> productList = [];
+                    List<ProductModel> allResults = [];
                     final teknosaResults = await extractData(value, "teknosa");
                     final itopyaResults = await extractData(value, "itopya");
-                    final vatanResults = await extractData(value, "vatan");
+                    final vatanResults = await extractData(value, "vatan bilgisayar");
 
+                    allResults.addAll(teknosaResults!);
+                    allResults.addAll(itopyaResults!);
+                    allResults.addAll(vatanResults!);
 
-                    productList.addAll(teknosaResults!);
-                    productList.addAll(itopyaResults!);
-                    productList.addAll(vatanResults!);
-
-                //    productList.map((e) => print(e.title));
+                    /*
+                    allResults.forEach((e) => print(
+                        "Ürün Adı : ${e.title}\nKategori : ${e.category}\nÜrün fiyatı : ${e.price}\nSatıcı : ${e.vendor}\nID : ${e.id}\nÜrün görseli : ${e.image} "));
+                    */
 
                     // ignore: use_build_context_synchronously
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const Categories()),
+                          builder: (context) =>  Categories(content:"searched products",searchedProducts: allResults)),
                     );
                   },
                   decoration: const InputDecoration(

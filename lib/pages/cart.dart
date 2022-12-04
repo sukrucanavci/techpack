@@ -10,10 +10,10 @@ class Cart extends StatefulWidget {
 
   const Cart(
       {super.key,
-      required this.cart,
-      required this.logoMap,
-      required this.addToCart,
-      required this.removeFromCart});
+        required this.cart,
+        required this.logoMap,
+        required this.addToCart,
+        required this.removeFromCart});
 
   @override
   State<Cart> createState() => _CartState();
@@ -37,7 +37,7 @@ class _CartState extends State<Cart> {
       });
 
       quantityMap.keys.forEach((product) {
-        //total += product.price * quantityMap[product]!;
+        total += product.price * quantityMap[product]!;
       });
     });
   }
@@ -46,7 +46,7 @@ class _CartState extends State<Cart> {
     widget.addToCart(product);
 
     setState(() {
-     // total += product.price;
+      total += product.price;
       quantityMap[product] = quantityMap[product]! + 1;
     });
   }
@@ -55,7 +55,7 @@ class _CartState extends State<Cart> {
     widget.removeFromCart(product);
 
     setState(() {
-     // total -= product.price;
+      total -= product.price;
       if (quantityMap[product] == 1) {
         quantityMap.remove(product);
       } else {
@@ -185,10 +185,10 @@ class _CartState extends State<Cart> {
           children: [
             Expanded(
                 child: ListView(
-              children: [
-                for (final entry in quantityMap.entries) _buildCard(entry),
-              ],
-            )),
+                  children: [
+                    for (final entry in quantityMap.entries) _buildCard(entry),
+                  ],
+                )),
             Column(
               children: [
                 Padding(
