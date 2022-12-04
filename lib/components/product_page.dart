@@ -51,7 +51,9 @@ class _ProductPageState extends State<ProductPage> {
                   width: 75,
                   decoration: BoxDecoration(
                       image: DecorationImage(
-                          image: AssetImage(product.image),
+                          image: widget.category== "search"
+                              ? NetworkImage(product.image)
+                              : AssetImage(product.image) as ImageProvider,
                           fit: BoxFit.contain)),
                 ),
                 const SizedBox(height: 6),
@@ -135,7 +137,7 @@ class _ProductPageState extends State<ProductPage> {
               primary: false,
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
-              childAspectRatio: 0.7,
+              childAspectRatio: 0.63,
               children: <Widget>[
                 for (final product in productInfo.products)
                   if (product.category == widget.category)

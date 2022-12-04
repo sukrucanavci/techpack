@@ -10,10 +10,10 @@ class Cart extends StatefulWidget {
 
   const Cart(
       {super.key,
-      required this.cart,
-      required this.logoMap,
-      required this.addToCart,
-      required this.removeFromCart});
+        required this.cart,
+        required this.logoMap,
+        required this.addToCart,
+        required this.removeFromCart});
 
   @override
   State<Cart> createState() => _CartState();
@@ -86,7 +86,9 @@ class _CartState extends State<Cart> {
                 width: 85,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage(entry.key.image),
+                        image: entry.key.category== "search"
+                            ? NetworkImage(entry.key.image)
+                            : AssetImage(entry.key.image) as ImageProvider,
                         fit: BoxFit.contain)),
               ),
               Container(
@@ -185,10 +187,10 @@ class _CartState extends State<Cart> {
           children: [
             Expanded(
                 child: ListView(
-              children: [
-                for (final entry in quantityMap.entries) _buildCard(entry),
-              ],
-            )),
+                  children: [
+                    for (final entry in quantityMap.entries) _buildCard(entry),
+                  ],
+                )),
             Column(
               children: [
                 Padding(
