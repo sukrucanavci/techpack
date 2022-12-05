@@ -65,8 +65,12 @@ class _MainpageState extends State<Mainpage> {
           .querySelectorAll(
           "div.product-list__content > div.product-list__cost > span.product-list__price")
           .take(4)
-          .map((e) => e.innerHtml.trim())
-          .toList();
+          .map((e) {
+        String price = e.innerHtml.trim();
+        String formattedPrice = price.replaceAll(".", "");
+        return formattedPrice;
+      }).toList();
+
 
       images = html
           .querySelectorAll(
@@ -86,11 +90,11 @@ class _MainpageState extends State<Mainpage> {
           "#productList > div.product > div.product-footer > div.price > strong")
           .take(4)
           .map((e) {
-        String price = e.innerHtml.trim();
-        String formattedPrice = price.substring(0, price.indexOf(","));
-        String formattedPrice2 = formattedPrice.replaceAll(".", "");
-        return formattedPrice2;
-      }).toList();
+            String price = e.innerHtml.trim();
+            String formattedPrice = price.substring(0, price.indexOf(","));
+            String formattedPrice2 = formattedPrice.replaceAll(".", "");
+            return formattedPrice2;
+          }).toList();
 
       images = html
           .querySelectorAll(

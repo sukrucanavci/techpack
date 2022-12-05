@@ -69,7 +69,7 @@ class _ProductPageState extends State<ProductPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5),
                   child: Text(
-                    product.title,
+                    product.title.length>=30 ? product.title.substring(0,30) : product.title,
                     style:
                         const TextStyle(color: Colors.deepPurple, fontSize: 14),
                     textAlign: TextAlign.center,
