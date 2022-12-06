@@ -40,6 +40,9 @@ dependencies:
   google_maps_flutter: ^2.2.1
   flutter_lints: ^2.0.0
   sqflite: ^2.2.1
+  flutter_polyline_points: ^1.0.0
+  geocoding: ^2.0.5
+  geolocator: ^9.0.2
   http: ^0.13.5
   html: ^0.15.1
   
