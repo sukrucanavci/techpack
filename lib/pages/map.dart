@@ -11,6 +11,9 @@ import 'package:path/path.dart' as Path;
 import '../models/stores_model.dart';
 
 class MapPage extends StatefulWidget {
+  const MapPage({super.key, required this.storeLocations});
+  final List<Store> storeLocations;
+
   @override
   _MapPageViewState createState() => _MapPageViewState();
 }
@@ -41,47 +44,16 @@ class _MapPageViewState extends State<MapPage> {
     double lat = 0;
     double lng = 0;
 
-    for (var i = 0; i < storeLocations.length; ++i) {
-      lat += double.parse(storeLocations[i].latitude);
-      lng += double.parse(storeLocations[i].longitude);
+    for (var i = 0; i < widget.storeLocations.length; ++i) {
+      lat += double.parse(widget.storeLocations[i].latitude);
+      lng += double.parse(widget.storeLocations[i].longitude);
     }
 
-    lat /= (storeLocations.length);
-    lng /= (storeLocations.length);
+    lat /= (widget.storeLocations.length);
+    lng /= (widget.storeLocations.length);
 
     return CameraPosition(target: LatLng(lat, lng), zoom: 0.5);
   }
-
-  List<Store> storeLocations = [
-    Store(
-        id: 18,
-        name: "İstanbul İsti̇nye Park Exxtra",
-        latitude: "41.10996",
-        longitude: "29.03223",
-        address:
-            "Pınar Mahallesi İstinye Bayırı Cad. İstinye Park Alışveriş Merkezi No:73 Mgz No: L206 - L208, 34460 İSTİNYE MAH SARIYER İstanbul TR"),
-    Store(
-        id: 19,
-        name: "İstanbul Levent Metrocity Extra Yeni̇",
-        latitude: "41.07615",
-        longitude: "29.01295",
-        address:
-            "Büyükdere Cad. N0 171 Metrocity Avm Kat-1 LEVENT MAH BEŞİKTAŞ İstanbul TR"),
-    Store(
-        id: 16,
-        name: "İstanbul Eti̇ler Akmerkez",
-        latitude: "41.07690152089097",
-        longitude: "29.026803907270917",
-        address:
-            "İstanbul Nispetiye Caddesi Akmerkez Avm 418-419 nolu mağaza ETİLER MAH BEŞİKTAŞ İstanbul TR"),
-    Store(
-        id: 14,
-        name: "İstanbul Altuni̇zade Capitol",
-        latitude: "41.02086",
-        longitude: "29.03943",
-        address:
-            "Mahiriz Cad. Capitol Avm No:71 ALTUNİZADE MAH ÜSKÜDAR İstanbul TR")
-  ];
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -116,11 +88,11 @@ class _MapPageViewState extends State<MapPage> {
       Marker startMarker;
       Marker destinationMarker;
 
-      for (int index = 0; index < storeLocations.length - 1; index++) {
-        var startLat = double.parse(storeLocations[index].latitude);
-        var startLong = double.parse(storeLocations[index].longitude);
-        var endLat = double.parse(storeLocations[index + 1].latitude);
-        var endLong = double.parse(storeLocations[index + 1].longitude);
+      for (int index = 0; index < widget.storeLocations.length - 1; index++) {
+        var startLat = double.parse(widget.storeLocations[index].latitude);
+        var startLong = double.parse(widget.storeLocations[index].longitude);
+        var endLat = double.parse(widget.storeLocations[index + 1].latitude);
+        var endLong = double.parse(widget.storeLocations[index + 1].longitude);
 
         startMarker = Marker(
           markerId: MarkerId(index.toString()),
@@ -129,8 +101,8 @@ class _MapPageViewState extends State<MapPage> {
             startLong,
           ),
           infoWindow: InfoWindow(
-            title: storeLocations[index].name,
-            snippet: storeLocations[index].address,
+            title: widget.storeLocations[index].name,
+            snippet: widget.storeLocations[index].address,
           ),
           icon: BitmapDescriptor.defaultMarker,
         );
@@ -142,8 +114,8 @@ class _MapPageViewState extends State<MapPage> {
             endLong,
           ),
           infoWindow: InfoWindow(
-            title: storeLocations[index + 1].name,
-            snippet: storeLocations[index + 1].address,
+            title: widget.storeLocations[index + 1].name,
+            snippet: widget.storeLocations[index + 1].address,
           ),
           icon: BitmapDescriptor.defaultMarker,
         );
@@ -216,14 +188,14 @@ class _MapPageViewState extends State<MapPage> {
   }
 
   _createPolylines(int startIndex, int endIndex) async {
-    var startLat = double.parse(storeLocations[startIndex].latitude);
-    var startLong = double.parse(storeLocations[startIndex].longitude);
-    var endLat = double.parse(storeLocations[endIndex].latitude);
-    var endLong = double.parse(storeLocations[endIndex].longitude);
+    var startLat = double.parse(widget.storeLocations[startIndex].latitude);
+    var startLong = double.parse(widget.storeLocations[startIndex].longitude);
+    var endLat = double.parse(widget.storeLocations[endIndex].latitude);
+    var endLong = double.parse(widget.storeLocations[endIndex].longitude);
 
     polylinePoints = PolylinePoints();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      "AIzaSyDnUcpB4pSoX9ge_vg7s4uU6k3zm0SILQU",
+      "AIzaSyCHeCkv14TSN02WunbYwJqp4jV5etix6LM",
       PointLatLng(startLat, startLong),
       PointLatLng(endLat, endLong),
       travelMode: TravelMode.transit,
