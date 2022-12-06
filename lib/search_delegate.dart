@@ -82,7 +82,9 @@ class ProductSearchDelegate extends SearchDelegate {
                             width: 65,
                             decoration: BoxDecoration(
                                 image: DecorationImage(
-                                    image: AssetImage(result.image),
+                                    image: result.category== "search"
+                                        ? NetworkImage(result.image)
+                                        : AssetImage(result.image) as ImageProvider,
                                     fit: BoxFit.contain)),
                           ),
                           Container(

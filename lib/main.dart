@@ -56,6 +56,7 @@ void main() async {
     );
   }
 
+
   var vatan0 = const Store(
       id: 0,
       name: "İstanbul (212 Outlet AVM)",
@@ -664,27 +665,39 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          Container(
-            decoration: const BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage("assets/splash.png"), fit: BoxFit.cover)),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: const <Widget>[
-                Padding(
-                    padding: EdgeInsets.fromLTRB(
-                        50, 500, 10, 50)), //or const EdgeInsets.all(280.0),),
-                CircularProgressIndicator(
-                  color: Colors.deepPurple,
+      body: SafeArea(
+        child: Column(
+            children: <Widget>[
+              Expanded(
+                  flex:1,
+                  child: Image.asset('assets/images/104314.png')
+              ),
+              Expanded(
+                  flex:1,
+                  child: Image.asset('assets/images/Vatan_Computer.jpg')
+              ),
+              Expanded(
+                  flex:1,
+                  child: Image.asset('assets/images/TEKnosa.png')
+              ),
+              Expanded(
+                  flex:2,
+                  child: Image.asset('assets/logo.jpg')
+              ),
+              Expanded(
+                flex:1,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: const <Widget>[
+                  CircularProgressIndicator(
+                    color: Colors.deepPurple,
+                  ),
+                  ],
                 ),
-              ],
-            ),
-          )
-        ],
-      ),
-    );
+              ),
+            ],
+          ),
+        ),
+      );
   }
 }
