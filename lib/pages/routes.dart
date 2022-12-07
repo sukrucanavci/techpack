@@ -13,18 +13,27 @@ class Routes extends StatefulWidget {
   const Routes({super.key, required this.products, required this.totalPrice});
 
   final List<ProductModel> products;
-  final double totalPrice;
+  final num totalPrice;
 
   @override
   State<Routes> createState() => _RoutesState();
 }
 
 class _RoutesState extends State<Routes> {
-  late Position _currentPosition;
+  Position _currentPosition = Position(
+      longitude: 28.7259004,
+      latitude: 40.9898818,
+      timestamp: DateTime.now(),
+      accuracy: 0,
+      altitude: 0,
+      heading: 0,
+      speed: 0,
+      speedAccuracy: 0);
 
   List<Store> stores = [];
   List<String> storeNamelist = [];
   List<Store> closestStores = [];
+  double totalDistance = 0;
 
   _findStoreNames() {
     for (var product in widget.products) {
@@ -32,6 +41,7 @@ class _RoutesState extends State<Routes> {
         storeNamelist.add(product.vendor);
       }
     }
+    print(storeNamelist);
   }
 
   Future<void> _getStores() async {
@@ -43,15 +53,18 @@ class _RoutesState extends State<Routes> {
 
     final List<Map<String, dynamic>> maps = await db.query('stores');
 
-    stores = List.generate(maps.length, (i) {
-      return Store(
-        id: maps[i]['id'],
-        name: maps[i]['name'],
-        latitude: maps[i]['latitude'],
-        longitude: maps[i]['longitude'],
-        address: maps[i]['address'],
-      );
-    });
+    stores = List.generate(
+      maps.length,
+      (i) {
+        return Store(
+          id: maps[i]['id'],
+          name: maps[i]['name'],
+          latitude: maps[i]['latitude'],
+          longitude: maps[i]['longitude'],
+          address: maps[i]['address'],
+        );
+      },
+    );
   }
 
   Future<void> _determinePosition() async {
@@ -80,7 +93,7 @@ class _RoutesState extends State<Routes> {
     _currentPosition = await Geolocator.getCurrentPosition();
   }
 
-  double _coordinateDistance(lat2, lon2) {
+  double _coordinateDistance(double lat2, double lon2) {
     var p = 0.017453292519943295;
     var c = cos;
     var a = 0.5 -
@@ -94,34 +107,42 @@ class _RoutesState extends State<Routes> {
 
   Store findClosestStore(String vendor) {
     double distance = 9999999;
-    Store store = stores[0];
+    Store returnStore = stores[0];
 
     for (var store in stores) {
       if (store.name.contains(vendor)) {
-        var storeDistance =
-            _coordinateDistance(store.latitude, store.longitude);
-        if (storeDistance <= distance) {
+        var storeDistance = _coordinateDistance(
+            double.parse(store.latitude), double.parse(store.longitude));
+        if (storeDistance < distance) {
           distance = storeDistance;
-          store = store;
+          returnStore = store;
         }
       }
     }
-    return store;
+    setState(() {
+      totalDistance += distance;
+    });
+    return returnStore;
   }
 
   _determineClosestStores() {
     for (var storeName in storeNamelist) {
       closestStores.add(findClosestStore(storeName));
+      print(closestStores);
     }
   }
 
   @override
   void initState() {
-    /*
     _findStoreNames();
     _determinePosition();
     _getStores().then((value) => {_determineClosestStores()});
-    */
+    closestStores.add(Store(
+        id: 999,
+        name: "Konumum",
+        latitude: "${_currentPosition.latitude}",
+        longitude: "${_currentPosition.longitude}",
+        address: ""));
     super.initState();
   }
 
@@ -146,14 +167,9 @@ class _RoutesState extends State<Routes> {
         child: Column(
           children: [
             RouteCard(
-              tutar: "${widget.totalPrice} TL",
-              mesafe: "3164 m",
+              tutar: "${widget.totalPrice.toStringAsFixed(3)} TL",
+              mesafe: "${totalDistance.toStringAsFixed(3)} m",
               yuksekMi: false,
-            ),
-            RouteCard(
-              tutar: "18.412 TL",
-              mesafe: "1596 m",
-              yuksekMi: true,
             ),
           ],
         ),

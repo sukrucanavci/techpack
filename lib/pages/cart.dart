@@ -21,7 +21,7 @@ class Cart extends StatefulWidget {
 
 class _CartState extends State<Cart> {
   Map<ProductModel, int> quantityMap = {};
-  double total = 0;
+  num total = 0;
 
   @override
   void initState() {

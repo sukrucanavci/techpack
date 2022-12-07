@@ -23,8 +23,15 @@ class _MapPageViewState extends State<MapPage> {
       CameraPosition(target: LatLng(40.9898818, 28.7259004));
   late GoogleMapController mapController;
 
-  late Position _currentPosition;
-  String _currentAddress = "";
+  Position _currentPosition = Position(
+      longitude: 28.7259004,
+      latitude: 40.9898818,
+      timestamp: DateTime.now(),
+      accuracy: 0,
+      altitude: 0,
+      heading: 0,
+      speed: 0,
+      speedAccuracy: 0);
 
   final startAddressController = TextEditingController();
   final destinationAddressController = TextEditingController();
@@ -80,7 +87,7 @@ class _MapPageViewState extends State<MapPage> {
           'Location permissions are permanently denied, we cannot request permissions.');
     }
 
-    _currentPosition = await Geolocator.getCurrentPosition();
+    //_currentPosition = await Geolocator.getCurrentPosition();
   }
 
   Future<bool> _calculateDistance() async {
@@ -139,21 +146,7 @@ class _MapPageViewState extends State<MapPage> {
           ? storeLocations[1].longitude
           : storeLocations[0].longitude;
 
-      *mapController.animateCamera(
-        CameraUpdate.newLatLngBounds(
-          LatLngBounds(
-            northeast: LatLng(
-              maxy,
-              maxx,
-            ),
-            southwest: LatLng(
-              miny,
-              minx,
-            ),
-          ),
-          100.0,
-        ),
-      );*/
+      */
 
       /*double totalDistance = 0.0;
 
@@ -198,7 +191,42 @@ class _MapPageViewState extends State<MapPage> {
       "AIzaSyCHeCkv14TSN02WunbYwJqp4jV5etix6LM",
       PointLatLng(startLat, startLong),
       PointLatLng(endLat, endLong),
-      travelMode: TravelMode.transit,
+      travelMode: TravelMode.driving,
+    );
+
+    if (result.points.isNotEmpty) {
+      result.points.forEach((PointLatLng point) {
+        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+      });
+    }
+
+    PolylineId id = PolylineId('poly');
+    Polyline polyline = Polyline(
+      polylineId: id,
+      color: Colors.purple,
+      points: polylineCoordinates,
+      width: 6,
+    );
+    polylines[id] = polyline;
+    setState(() {});
+    setState(() {
+      mapController
+          .moveCamera(CameraUpdate.newCameraPosition(_initialLocation));
+    });
+  }
+
+  _userLocPoly() async {
+    var startLat = _currentPosition.latitude;
+    var startLong = _currentPosition.longitude;
+    var endLat = double.parse(widget.storeLocations[0].latitude);
+    var endLong = double.parse(widget.storeLocations[0].longitude);
+
+    polylinePoints = PolylinePoints();
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+      "AIzaSyCHeCkv14TSN02WunbYwJqp4jV5etix6LM",
+      PointLatLng(startLat, startLong),
+      PointLatLng(endLat, endLong),
+      travelMode: TravelMode.driving,
     );
 
     if (result.points.isNotEmpty) {
@@ -276,10 +304,13 @@ class _MapPageViewState extends State<MapPage> {
   @override
   void initState() {
     //_createPolylines();
-
+    _determinePosition();
     super.initState();
     //_getCurrentLocation();
+
     //_showRoute();
+    //_userLocPoly();
+    setState(() {});
   }
 
   @override
@@ -325,7 +356,12 @@ class _MapPageViewState extends State<MapPage> {
                 polylines: Set<Polyline>.of(polylines.values),
                 onMapCreated: (GoogleMapController controller) {
                   mapController = controller;
-                  _showRoute();
+                  mapController.animateCamera(CameraUpdate.zoomTo(1));
+
+                  setState(() {
+                    _showRoute();
+                    _determinePosition();
+                  });
                 },
               ),
             ],
