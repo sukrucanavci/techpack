@@ -27,14 +27,10 @@ class _SearchedProductsState extends State<SearchedProducts>
                   fontWeight: FontWeight.bold,
                   color: Colors.purple)),
           const SizedBox(height: 15),
-
-          Container(
-
+          SizedBox(
             height: MediaQuery.of(context).size.height -100,
             width: double.infinity,
-            child:
-
-              ProductPage(category:"search"),
+            child: const ProductPage(category:"search"),
           )
         ],
       ),

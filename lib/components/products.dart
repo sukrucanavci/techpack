@@ -59,8 +59,8 @@ class _ProductsState extends State<Products>
                   style: TextStyle(fontSize: 19),
                 ))
               ]),
-          Container(
-            height: MediaQuery.of(context).size.height - 100,
+          SizedBox(
+            height: MediaQuery.of(context).size.height-100,
             width: double.infinity,
             child: TabBarView(controller: _tabController, children: const [
               ProductPage(category:"laptop"),
