@@ -4,6 +4,6 @@ IUC - Mobile Programming Project
 
 ## Authors
 
-Burak Andarman <br />
-Şükrü Can Avcı <br />
-Fatma Zeynep Çelikten <br />
+Burak Andarman (Computer Engineer)<br />
+Şükrü Can Avcı (Computer Engineer)<br />
+Fatma Zeynep Çelikten (Computer Engineer)<br />
