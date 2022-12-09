@@ -35,6 +35,7 @@ class Categories extends StatefulWidget {
 class _CategoriesState extends State<Categories> {
   List<ProductModel>? _products;
   List<ProductModel> _cart = [];
+
   final Map<String, String> _logoMap = {
     "itopya": "assets/images/104314.png",
     "vatan bilgisayar": "assets/images/Vatan_Computer.jpg",

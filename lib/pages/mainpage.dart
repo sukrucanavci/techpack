@@ -13,15 +13,18 @@ class Mainpage extends StatefulWidget {
 }
 
 class _MainpageState extends State<Mainpage> {
+  bool isSearching = false;
 
   String queryBuilder(String query, String vendor) {
     String url;
 
-    if(vendor == "teknosa") {
+    if (vendor == "teknosa") {
       url = "https://www.teknosa.com/arama/?s=$query";
     } else if (vendor == "itopya") {
       url = "https://www.itopya.com/AramaSonuclari?text=$query";
-    } else {
+    } /*else if (vendor == "media markt") {
+      url = "https://www.akakce.com/magaza/mediamarkt.html?pq=$query";
+    } */ else {
       url = "https://www.vatanbilgisayar.com/arama/$query/";
     }
 
@@ -29,12 +32,14 @@ class _MainpageState extends State<Mainpage> {
   }
 
   List<ProductModel> scraper(String vendor, http.Response response) {
-    List<String>? titles, prices, images;
+    List<String> titles=[];
+    List<String> prices=[];
+    List<String> images=[];
     Random rnd = Random();
     List<ProductModel> searchedProducts = [];
     dom.Document html = dom.Document.html(response.body);
 
-    if (vendor == "teknosa") {
+    if (vendor == "teknosa" && html.querySelectorAll('#product-item > a.prd-link').isNotEmpty) {
       titles = html
           .querySelectorAll('#product-item > a.prd-link')
           .take(4)
@@ -49,36 +54,35 @@ class _MainpageState extends State<Mainpage> {
 
       images = html
           .querySelectorAll(
-          '#product-item > div > div.prd-media > figure > img')
+              '#product-item > div > div.prd-media > figure > img')
           .take(4)
           .map((e) => e.attributes['data-srcset']!)
           .toList();
-    } else if (vendor == "vatan bilgisayar") {
+    } else if (vendor == "vatan bilgisayar" && html.querySelectorAll("div.product-list__content > a > div.product-list__product-name > h3").isNotEmpty) {
       titles = html
           .querySelectorAll(
-          "div.product-list__content > a > div.product-list__product-name > h3")
+              "div.product-list__content > a > div.product-list__product-name > h3")
           .take(4)
           .map((e) => e.innerHtml.trim())
           .toList();
 
       prices = html
           .querySelectorAll(
-          "div.product-list__content > div.product-list__cost > span.product-list__price")
+              "div.product-list__content > div.product-list__cost > span.product-list__price")
           .take(4)
           .map((e) {
-        String price = e.innerHtml.trim();
-        String formattedPrice = price.replaceAll(".", "");
-        return formattedPrice;
-      }).toList();
-
+            String price = e.innerHtml.trim();
+            String formattedPrice = price.replaceAll(".", "");
+            return formattedPrice;
+        }).toList();
 
       images = html
           .querySelectorAll(
-          "div.product-list__image-safe > a > div:nth-child(1) > img")
+              "div.product-list__image-safe > a > div:nth-child(1) > img")
           .take(4)
           .map((e) => e.attributes["data-src"]!)
           .toList();
-    } else if (vendor == "itopya") {
+    } else if (vendor == "itopya" && html.querySelectorAll("#productList > div.product > div.product-body > a").isNotEmpty) {
       titles = html
           .querySelectorAll("#productList > div.product > div.product-body > a")
           .take(4)
@@ -87,32 +91,58 @@ class _MainpageState extends State<Mainpage> {
 
       prices = html
           .querySelectorAll(
-          "#productList > div.product > div.product-footer > div.price > strong")
+              "#productList > div.product > div.product-footer > div.price > strong")
           .take(4)
           .map((e) {
             String price = e.innerHtml.trim();
             String formattedPrice = price.substring(0, price.indexOf(","));
             String formattedPrice2 = formattedPrice.replaceAll(".", "");
             return formattedPrice2;
+        }).toList();
+
+      images = html
+          .querySelectorAll(
+              "#productList > div.product > div.product-header > a.image > img")
+          .take(4)
+          .map((e) => e.attributes["data-src"]!)
+          .toList();
+    } /*
+    else if (vendor == "media markt" && html.querySelectorAll("#MSL > li > a > span > h3.pn_v8").isNotEmpty) {
+      titles = html
+          .querySelectorAll(
+              "#MSL > li > a > span > h3.pn_v8")
+          .take(4)
+          .map((e) => e.innerHtml.trim())
+          .toList();
+
+      prices = html
+          .querySelectorAll(
+              "#MSL > li > a > span.w_v8 > span.pb_v8 > span.pt_v8")
+          .take(4)
+          .map((e) {
+            String price = e.text.trim();
+            String formattedPrice = price.substring(0, price.indexOf(",")).replaceAll(".", "");
+            return formattedPrice;
           }).toList();
 
       images = html
           .querySelectorAll(
-          "#productList > div.product > div.product-header > a.image > img")
+              "#MSL > li > a > img")
           .take(4)
-          .map((e) => e.attributes["data-src"]!)
+          .map((e) => e.attributes["src"]!)
           .toList();
     }
+    */
 
-    for (int i = 0; i < 4; i++) {
-      searchedProducts.add(ProductModel(
-          title: titles![i],
-          category: "search",
-          price: double.parse(prices![i]),
-          vendor: vendor,
-          id: rnd.nextInt(10000),
-          image: images![i]));
-    }
+      for (int i = 0; i < titles.length; i++) {
+        searchedProducts.add(ProductModel(
+            title: titles[i],
+            category: "search",
+            price: double.parse(prices[i]),
+            vendor: vendor,
+            id: rnd.nextInt(10000),
+            image: images[i]));
+      }
 
     return searchedProducts;
   }
@@ -130,9 +160,46 @@ class _MainpageState extends State<Mainpage> {
     return products;
   }
 
+  Future<List<ProductModel>> search(String value) async {
+    List<ProductModel> allResults = [];
+
+    setState(() {
+      isSearching = true;
+    });
+
+    final teknosaResults = await extractData(value, "teknosa");
+    final itopyaResults = await extractData(value, "itopya");
+    final vatanResults = await extractData(value, "vatan bilgisayar");
+    final mmResults = await extractData(value, "media markt");
+
+    allResults.addAll(teknosaResults);
+    allResults.addAll(itopyaResults);
+    allResults.addAll(vatanResults);
+    allResults.addAll(mmResults);
+
+    setState(() {
+      isSearching = false;
+    });
+
+    return allResults;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return isSearching ?
+     Scaffold(
+         backgroundColor: Colors.white,
+         body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              CircularProgressIndicator(),
+              SizedBox(height: 15),
+              Text("Arama Devam Ediyor",style: TextStyle(color: Colors.purple,fontSize: 18))
+            ],
+          ),
+        )) :
+    Scaffold(
       backgroundColor: Colors.white,
       body: Center(
         child: SingleChildScrollView(
@@ -145,26 +212,31 @@ class _MainpageState extends State<Mainpage> {
                 width: 300.0,
                 child: TextField(
                   onSubmitted: (value) async {
-                    List<ProductModel> allResults = [];
-                    final teknosaResults = await extractData(value, "teknosa");
-                    final itopyaResults = await extractData(value, "itopya");
-                    final vatanResults = await extractData(value, "vatan bilgisayar");
+                    List<ProductModel> results = await search(value);
 
-                    allResults.addAll(teknosaResults!);
-                    allResults.addAll(itopyaResults!);
-                    allResults.addAll(vatanResults!);
+                    if(results.isEmpty){
+                      final error = SnackBar(
+                        content: const Text('Aradığınızı Bulamadık 🙁'),
+                        action: SnackBarAction(
+                          label: 'Kapat',
+                          onPressed: () {
+                          },
+                        ),
+                      );
 
-
-                    allResults.forEach((e) => print(
-                        "Ürün Adı : ${e.title}\nKategori : ${e.category}\nÜrün fiyatı : ${e.price}\nSatıcı : ${e.vendor}\nID : ${e.id}\nÜrün görseli : ${e.image} "));
-
-
-                    // ignore: use_build_context_synchronously
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>  Categories(content:"searched products",searchedProducts: allResults)),
-                    );
+                      // ignore: use_build_context_synchronously
+                      ScaffoldMessenger.of(context).showSnackBar(error);
+                    }
+                    else{
+                      // ignore: use_build_context_synchronously
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Categories(
+                                content: "searched products",
+                                searchedProducts: results)),
+                      );
+                    }
                   },
                   decoration: const InputDecoration(
                     suffixIcon: Icon(Icons.search),
@@ -178,54 +250,56 @@ class _MainpageState extends State<Mainpage> {
                 ),
               ),
               Center(
-                    child:Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        TextButton.icon(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const pastBaskets()),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.white,
-                            textStyle: const TextStyle(
-                                fontSize: 12, fontStyle: FontStyle.normal),
-                            shadowColor: Colors.purple,
-                          ),
-                          label: const Text('Past Baskets',
-                              style: TextStyle(color: Colors.purple)),
-                          icon: const Icon(
-                            Icons.shopping_basket_outlined,
-                            color: Colors.purple,
-                          ),
-                        ),
-                        TextButton.icon(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const Categories(content: "categories",searchedProducts: [],)),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.white,
-                            textStyle: const TextStyle(
-                                fontSize: 12, fontStyle: FontStyle.normal),
-                            shadowColor: Colors.purple,
-                          ),
-                          label: const Text('Categories',
-                              style: TextStyle(color: Colors.purple)),
-                          icon: const Icon(
-                            Icons.dehaze,
-                            color: Colors.purple,
-                          ),
-                        ),
-                      ],
-                    )
-                ),
+                  child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  TextButton.icon(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const pastBaskets()),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.white,
+                      textStyle: const TextStyle(
+                          fontSize: 12, fontStyle: FontStyle.normal),
+                      shadowColor: Colors.purple,
+                    ),
+                    label: const Text('Past Baskets',
+                        style: TextStyle(color: Colors.purple)),
+                    icon: const Icon(
+                      Icons.shopping_basket_outlined,
+                      color: Colors.purple,
+                    ),
+                  ),
+                  TextButton.icon(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Categories(
+                                  content: "categories",
+                                  searchedProducts: [],
+                                )),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.white,
+                      textStyle: const TextStyle(
+                          fontSize: 12, fontStyle: FontStyle.normal),
+                      shadowColor: Colors.purple,
+                    ),
+                    label: const Text('Categories',
+                        style: TextStyle(color: Colors.purple)),
+                    icon: const Icon(
+                      Icons.dehaze,
+                      color: Colors.purple,
+                    ),
+                  ),
+                ],
+              )),
             ],
           ),
         ),

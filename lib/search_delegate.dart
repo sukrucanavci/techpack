@@ -53,7 +53,7 @@ class ProductSearchDelegate extends SearchDelegate {
           .toList();
 
       return ListView.builder(
-          itemCount: matchQuery.length,
+          itemCount: matchQuery.length ,
           itemBuilder: ((context, index) {
             ProductModel result = matchQuery[index];
 
@@ -93,7 +93,7 @@ class ProductSearchDelegate extends SearchDelegate {
                             child: Column(
                               children: [
                                 Text(
-                                  result.title,
+                                  result.title.length>=50 ? "${result.title.substring(0,50)}..." : result.title,
                                   style: const TextStyle(
                                       color: Colors.deepPurple, fontSize: 12),
                                   textAlign: TextAlign.center,
@@ -203,7 +203,9 @@ class ProductSearchDelegate extends SearchDelegate {
                             width: 65,
                             decoration: BoxDecoration(
                                 image: DecorationImage(
-                                    image: AssetImage(result.image),
+                                    image: result.category== "search"
+                                        ? NetworkImage(result.image)
+                                        : AssetImage(result.image) as ImageProvider,
                                     fit: BoxFit.contain)),
                           ),
                           Container(
@@ -212,7 +214,7 @@ class ProductSearchDelegate extends SearchDelegate {
                             child: Column(
                               children: [
                                 Text(
-                                  result.title,
+                                  result.title.length>=50 ? "${result.title.substring(0,50)}..." : result.title,
                                   style: const TextStyle(
                                       color: Colors.deepPurple, fontSize: 12),
                                   textAlign: TextAlign.center,

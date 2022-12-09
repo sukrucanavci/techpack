@@ -69,7 +69,7 @@ class _ProductPageState extends State<ProductPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5),
                   child: Text(
-                    product.title.length>=30 ? product.title.substring(0,30) : product.title,
+                    product.title.length>=50 ? "${product.title.substring(0,50)}..." : product.title,
                     style:
                         const TextStyle(color: Colors.deepPurple, fontSize: 14),
                     textAlign: TextAlign.center,
@@ -129,9 +129,9 @@ class _ProductPageState extends State<ProductPage> {
       children: [
         const SizedBox(height: 15),
         Container(
-            padding: const EdgeInsets.only(right: 15),
-            width: MediaQuery.of(context).size.width - 30,
-            height: MediaQuery.of(context).size.height - 50,
+            padding: const EdgeInsets.only(right: 15,bottom: 15),
+            width: MediaQuery.of(context).size.width-30,
+            height: MediaQuery.of(context).size.height-300,
             child: GridView.count(
               crossAxisCount: 2,
               primary: false,

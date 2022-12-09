@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:techpack/pages/mainpage.dart';
 import 'package:sqflite/sqflite.dart';
 import 'models/stores_model.dart';
@@ -629,8 +628,6 @@ void main() async {
     teknosa18,
     teknosa19
   ]);
-
-  print(await stores());
 
   runApp(MaterialApp(
       title: "tech pack",
