@@ -2,6 +2,6 @@
 
 IUC - Mobile Programming Project
 
-Burak Andarman
-Şükrü Can Avcı
-Fatma Zeynep Çelikten
+Burak Andarman <br />
+Şükrü Can Avcı <br />
+Fatma Zeynep Çelikten <br />
