@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:techpack/models/product_model.dart';
-import 'package:techpack/pages/routes.dart';
+import 'package:techpack/pages/map.dart';
 
 class Cart extends StatefulWidget {
   final List<ProductModel> cart;
@@ -222,7 +222,7 @@ class _CartState extends State<Cart> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => Routes(
+                        builder: (context) => MapPage(
                           products: widget.cart,
                           totalPrice: total,
                         ),
