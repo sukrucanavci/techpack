@@ -1,24 +1,22 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, depend_on_referenced_packages, library_prefixes
 import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' as Path;
-import 'dart:math' as math;
+import 'package:sqflite/sqflite.dart';
+
 import '../components/gradiantText.dart';
 import '../models/product_model.dart';
 import '../models/stores_model.dart';
 
 class MapPage extends StatefulWidget {
-  const MapPage({super.key, required this.products, required this.totalPrice});
-  //final List<Store> storeLocations;
-  final List<ProductModel> products;
-  final num totalPrice;
+  const MapPage({super.key, required this.products});
+
+  final List<ProductModel> products; //Ürün listesi
 
   @override
   _MapPageViewState createState() => _MapPageViewState();
@@ -27,24 +25,23 @@ class MapPage extends StatefulWidget {
 class _MapPageViewState extends State<MapPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  late GoogleMapController mapController;
-  final Random _random = Random();
+  late GoogleMapController mapController; //Harita controller'ı
+  Set<Marker> markers = {}; //Harite markerları
 
-  final startAddressController = TextEditingController();
-  final destinationAddressController = TextEditingController();
+  //Kullanıcının konumu (enlem, boylam)
+  late Position _currentPosition;
 
-  final startAddressFocusNode = FocusNode();
-  final desrinationAddressFocusNode = FocusNode();
+  List<Store> stores = [];
+  List<String> storeNamelist = [];
+  List<Store> closestStores = [];
 
-  // ignore: unused_field
-  String _placeDistance = "0";
   bool isLoading = true;
-  Set<Marker> markers = {};
 
   late PolylinePoints polylinePoints;
   Map<PolylineId, Polyline> polylines = {};
   List<LatLng> polylineCoordinates = [];
 
+  //Harita üzerindeki markerları döndürür
   Future<BitmapDescriptor> _getStoreBitmapIcon(String name) async {
     if (name.contains("vatan")) {
       return await BitmapDescriptor.fromAssetImage(
@@ -71,10 +68,10 @@ class _MapPageViewState extends State<MapPage> {
     return BitmapDescriptor.defaultMarker;
   }
 
+  //Harita üzerine markerları ekler ve polyline çizmesi için createPolylines'ı çağırır
   Future<bool> _setupMarkersAndDrawPolylines() async {
     try {
       Marker startMarker;
-      Marker destinationMarker;
 
       for (int index = 0; index < closestStores.length - 1; index++) {
         var startLat = double.parse(closestStores[index].latitude);
@@ -102,15 +99,24 @@ class _MapPageViewState extends State<MapPage> {
     return false;
   }
 
+  /*
+    Hesaplama sonucunda en yakındaki bulunan marketlerin indexleri verilir. 
+    Bu 2 nokta arasında Google Directions API sayesinde rota bulunur.
+    Rotanın polyline noktaları arasında çizgiler çizdirilir ve polyline oluşturulur.
+  */
   _createPolylines(int startIndex, int endIndex) async {
     var startLat = double.parse(closestStores[startIndex].latitude);
     var startLong = double.parse(closestStores[startIndex].longitude);
+
     var endLat = double.parse(closestStores[endIndex].latitude);
     var endLong = double.parse(closestStores[endIndex].longitude);
 
     polylinePoints = PolylinePoints();
+
+    //Google Direction API'ye 2 nokta arasında rota bulması için istek atılır,
+    //Sonuç result değerinde tutulur
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      "AIzaSyCHeCkv14TSN02WunbYwJqp4jV5etix6LM",
+      "AIzaSyCHeCkv14TSN02WunbYwJqp4jV5etix6LM", //Google API KEY
       PointLatLng(startLat, startLong),
       PointLatLng(endLat, endLong),
       travelMode: TravelMode.driving,
@@ -122,64 +128,41 @@ class _MapPageViewState extends State<MapPage> {
       });
     }
 
-    PolylineId id = PolylineId(Random().nextInt(100).toString());
+    PolylineId id = PolylineId("polyline");
 
     Polyline polyline = Polyline(
       polylineId: id,
       color: Colors.purple,
       points: polylineCoordinates,
-      width: 4,
+      width: 5,
     );
     polylines[id] = polyline;
   }
 
   Future _showRoute() async {
-    startAddressFocusNode.unfocus();
-    desrinationAddressFocusNode.unfocus();
-
     setState(() {
       if (markers.isNotEmpty) markers.clear();
       if (polylines.isNotEmpty) polylines.clear();
       if (polylineCoordinates.isNotEmpty) polylineCoordinates.clear();
-      _placeDistance = "";
     });
 
     _setupMarkersAndDrawPolylines().then((isSuccess) {
       if (isSuccess) {
         setState(() {
+          //CircularProgressIndicator gizlenir, harita gösterilir
           isLoading = false;
         });
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Route is ready'),
-          ),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Route is ready'),
+        ));
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Failure'),
-          ),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Route is failure'),
+        ));
       }
     });
   }
-
-  // -------------------------------------
-  Position _currentPosition = Position(
-      longitude: 28.7259004,
-      latitude: 40.9898818,
-      timestamp: DateTime.now(),
-      accuracy: 0,
-      altitude: 0,
-      heading: 0,
-      speed: 0,
-      speedAccuracy: 0);
-
-  List<Store> stores = [];
-  List<String> storeNamelist = [];
-  List<Store> closestStores = [];
-  double totalDistance = 0;
 
   Future _findStoreNames() async {
     for (var product in widget.products) {
@@ -262,12 +245,10 @@ class _MapPageViewState extends State<MapPage> {
         if (storeDistance < distance) {
           distance = storeDistance;
           returnStore = store;
+          returnStore.distance = distance;
         }
       }
     }
-    setState(() {
-      totalDistance += distance;
-    });
     return returnStore;
   }
 
@@ -276,6 +257,9 @@ class _MapPageViewState extends State<MapPage> {
       closestStores.add(findClosestStore(storeName));
       print(closestStores);
     }
+
+    closestStores.sort((a, b) => b.distance.compareTo(a.distance));
+
     closestStores.add(
       Store(
           id: 999,

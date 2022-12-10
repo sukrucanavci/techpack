@@ -222,10 +222,7 @@ class _CartState extends State<Cart> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => MapPage(
-                          products: widget.cart,
-                          totalPrice: total,
-                        ),
+                        builder: (context) => MapPage(products: widget.cart),
                       ));
                 },
                 backgroundColor: Colors.deepPurple,
