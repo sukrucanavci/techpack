@@ -318,8 +318,8 @@ var itopya0 = Store(
 var itopya1 = Store(
     id: 41,
     name: "itopya Airport AVM Ataköy",
-    latitude: "39.9102862",
-    longitude: "32.7970818",
+    latitude: "40.9915134",
+    longitude: "28.830672",
     address: "Ataköy Airport Alışveriş Merkezi 2. Kat 34158 Bakırköy/İstanbul");
 
 var itopya2 = Store(
