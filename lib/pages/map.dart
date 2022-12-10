@@ -31,10 +31,11 @@ class _MapPageViewState extends State<MapPage> {
   //Kullanıcının konumu (enlem, boylam)
   late Position _currentPosition;
 
-  List<Store> stores = [];
-  List<String> storeNamelist = [];
-  List<Store> closestStores = [];
+  List<Store> stores = []; //Tüm mağazalar
+  List<String> storeNamelist = []; //Sepetteki mağazaların isimleri
+  List<Store> closestStores = []; //En yakındaki mağazalar
 
+  //CircleProgressIndicator'ün gösteilmesini kontrol eden değer
   bool isLoading = true;
 
   late PolylinePoints polylinePoints;
@@ -104,7 +105,7 @@ class _MapPageViewState extends State<MapPage> {
     Bu 2 nokta arasında Google Directions API sayesinde rota bulunur.
     Rotanın polyline noktaları arasında çizgiler çizdirilir ve polyline oluşturulur.
   */
-  _createPolylines(int startIndex, int endIndex) async {
+  Future _createPolylines(int startIndex, int endIndex) async {
     var startLat = double.parse(closestStores[startIndex].latitude);
     var startLong = double.parse(closestStores[startIndex].longitude);
 
@@ -164,6 +165,7 @@ class _MapPageViewState extends State<MapPage> {
     });
   }
 
+  //Ürünlerin bulunduğu mağaza isimlerini bulur
   Future _findStoreNames() async {
     for (var product in widget.products) {
       if (storeNamelist.contains(product.vendor) == false) {
@@ -173,7 +175,8 @@ class _MapPageViewState extends State<MapPage> {
     print(storeNamelist);
   }
 
-  Future<void> _getStores() async {
+  //Sqlite veritabanından tüm mağazaları çeker
+  Future _getStores() async {
     final database = openDatabase(
       Path.join(await getDatabasesPath(), 'techpack_database.db'),
     );
@@ -196,7 +199,8 @@ class _MapPageViewState extends State<MapPage> {
     );
   }
 
-  Future<void> _determinePosition() async {
+  //Kullanıcının konumunu bulur
+  Future _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -222,6 +226,7 @@ class _MapPageViewState extends State<MapPage> {
     _currentPosition = await Geolocator.getCurrentPosition();
   }
 
+  //Mapazaların konumunun kullanıcıya olan uzaklığını bulur
   double _coordinateDistance(double lat2, double lon2) {
     var p = 0.017453292519943295;
     var c = cos;
@@ -234,6 +239,27 @@ class _MapPageViewState extends State<MapPage> {
     return 12742 * asin(sqrt(a));
   }
 
+  //En yakındaki mağazaları ve kullanıcının konumunu listeye ekler
+  Future _determineClosestStores() async {
+    for (var storeName in storeNamelist) {
+      closestStores.add(findClosestStore(storeName));
+    }
+
+    //Bulunan yakınlardaki mağazaları en kısa rota için kullanıcıya uzaklığına göre sıralar
+    closestStores.sort((a, b) => b.distance.compareTo(a.distance));
+
+    //Kullanıcı ile en yakınındaki mağaza arasında da polyline çizilebilmesi için eklendi
+    closestStores.add(
+      Store(
+          id: 999,
+          name: "My Location",
+          latitude: "${_currentPosition.latitude}",
+          longitude: "${_currentPosition.longitude}",
+          address: ""),
+    );
+  }
+
+  //En yakındaki mağazayı bulur (vendor: mağaza adı)
   Store findClosestStore(String vendor) {
     double distance = 9999999;
     Store returnStore = stores[0];
@@ -251,26 +277,6 @@ class _MapPageViewState extends State<MapPage> {
     }
     return returnStore;
   }
-
-  Future _determineClosestStores() async {
-    for (var storeName in storeNamelist) {
-      closestStores.add(findClosestStore(storeName));
-      print(closestStores);
-    }
-
-    closestStores.sort((a, b) => b.distance.compareTo(a.distance));
-
-    closestStores.add(
-      Store(
-          id: 999,
-          name: "Konumum",
-          latitude: "${_currentPosition.latitude}",
-          longitude: "${_currentPosition.longitude}",
-          address: ""),
-    );
-  }
-
-  //-------------------------------------------
 
   @override
   void initState() {
