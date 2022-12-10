@@ -503,3 +503,19 @@ var teknosa19 = const Store(
     longitude: "29.01295",
     address:
         "Büyükdere Cad. N0 171 Metrocity Avm Kat-1 LEVENT MAH BEŞİKTAŞ İstanbul TR");
+
+var teknosa20 = const Store(
+    id: 65,
+    name: "teknosa Torium",
+    latitude: "41.0031681",
+    longitude: "28.6886759",
+    address:
+        "Turgut Özal Mh. 68. Sk. No:50 Mağaza No:253 Haramidere, 34513 Esenyurt");
+
+var teknosa21 = const Store(
+    id: 66,
+    name: "teknosa Pelican",
+    latitude: "40.9910648",
+    longitude: "28.7149909",
+    address:
+        "Üniversite Mh. E - 5 Yanyol Cd. No:42 Pelican Mall Alışveriş Merkezi Kat:B1 Mgz No:17, 34320 Avcılar");

@@ -91,6 +91,19 @@ class _RoutesState extends State<Routes> {
     }
 
     _currentPosition = await Geolocator.getCurrentPosition();
+
+    closestStores.add(
+      Store(
+          id: 999,
+          name: "Konumum",
+          latitude: "${_currentPosition.latitude}",
+          longitude: "${_currentPosition.longitude}",
+          address: ""),
+    );
+
+    setState(() {
+      isLoading = false;
+    });
   }
 
   double _coordinateDistance(double lat2, double lon2) {
@@ -137,14 +150,11 @@ class _RoutesState extends State<Routes> {
     _findStoreNames();
     _determinePosition();
     _getStores().then((value) => {_determineClosestStores()});
-    closestStores.add(Store(
-        id: 999,
-        name: "Konumum",
-        latitude: "${_currentPosition.latitude}",
-        longitude: "${_currentPosition.longitude}",
-        address: ""));
+
     super.initState();
   }
+
+  bool isLoading = true;
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +164,7 @@ class _RoutesState extends State<Routes> {
           icon: Icon(Icons.arrow_back, color: Colors.purple),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text(
+        title: const Text(
           "Rotalar",
           style: TextStyle(
             color: Colors.purple,
@@ -163,17 +173,21 @@ class _RoutesState extends State<Routes> {
         centerTitle: false,
         backgroundColor: Colors.white,
       ),
-      body: Center(
-        child: Column(
-          children: [
-            RouteCard(
-              tutar: "${widget.totalPrice.toStringAsFixed(3)} TL",
-              mesafe: "${totalDistance.toStringAsFixed(3)} m",
-              yuksekMi: false,
+      body: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Center(
+              child: Column(
+                children: [
+                  RouteCard(
+                    tutar: "${widget.totalPrice.toStringAsFixed(3)} TL",
+                    mesafe: "${totalDistance.toStringAsFixed(3)} m",
+                    yuksekMi: false,
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
-      ),
       bottomNavigationBar: Container(
         margin: EdgeInsets.all(12),
         child: TextButton(
@@ -182,9 +196,8 @@ class _RoutesState extends State<Routes> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => MapPage(
-                        storeLocations: closestStores,
-                      )),
+                builder: (context) => MapPage(storeLocations: closestStores),
+              ),
             );
           },
         ),

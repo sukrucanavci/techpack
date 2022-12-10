@@ -46,6 +46,7 @@ void main() async {
     });
   }
 
+/*
   Future<void> deleteStore(int id) async {
     final db = await database;
 
@@ -55,6 +56,7 @@ void main() async {
       whereArgs: [id],
     );
   }
+  */
 
   await insertStores([
     vatan0,
@@ -121,7 +123,9 @@ void main() async {
     teknosa16,
     teknosa17,
     teknosa18,
-    teknosa19
+    teknosa19,
+    teknosa20,
+    teknosa21,
   ]);
 
   runApp(MaterialApp(
@@ -159,12 +163,22 @@ class _MyAppState extends State<MyApp> {
       body: SafeArea(
         child: Column(
           children: <Widget>[
-            Expanded(flex: 1, child: Image.asset('assets/images/104314.png')),
             Expanded(
-                flex: 1,
-                child: Image.asset('assets/images/Vatan_Computer.jpg')),
-            Expanded(flex: 1, child: Image.asset('assets/images/TEKnosa.png')),
-            Expanded(flex: 2, child: Image.asset('assets/logo.jpg')),
+              flex: 1,
+              child: Image.asset('assets/images/104314.png'),
+            ),
+            Expanded(
+              flex: 1,
+              child: Image.asset('assets/images/Vatan_Computer.jpg'),
+            ),
+            Expanded(
+              flex: 1,
+              child: Image.asset('assets/images/TEKnosa.png'),
+            ),
+            Expanded(
+              flex: 2,
+              child: Image.asset('assets/logo.jpg'),
+            ),
             Expanded(
               flex: 1,
               child: Column(
