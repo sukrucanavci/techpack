@@ -17,8 +17,7 @@ class MyApp extends StatelessWidget {
         title: "Tech Pack",
         theme: ThemeData(
             primarySwatch: Colors.purple,
-            scaffoldBackgroundColor: Colors.white)
-    );
+            scaffoldBackgroundColor: Colors.white));
   }
 }
 
@@ -26,7 +25,8 @@ class Categories extends StatefulWidget {
   final String content;
   final List<ProductModel> searchedProducts;
 
-  const Categories({super.key, required this.content, required this.searchedProducts});
+  const Categories(
+      {super.key, required this.content, required this.searchedProducts});
 
   @override
   State<Categories> createState() => _CategoriesState();
@@ -46,24 +46,23 @@ class _CategoriesState extends State<Categories> {
   @override
   void initState() {
     super.initState();
-    if(widget.content == "categories"){
+    if (widget.content == "categories") {
       _getProducts();
-    }else if(widget.content == "searched products"){
+    } else if (widget.content == "searched products") {
       setState(() {
-        _products=widget.searchedProducts;
+        _products = widget.searchedProducts;
       });
-     /* _products!.forEach((e) => print(
+      /* _products!.forEach((e) => print(
           "Ürün Adı : ${e.title}\nKategori : ${e.category}\nÜrün fiyatı : ${e.price}\nSatıcı : ${e.vendor}\nID : ${e.id}\nÜrün görseli : ${e.image} "));
     */
     }
-
   }
 
   void _getProducts() async {
     List<dynamic> data = json
         .decode(await rootBundle.loadString("assets/data/mock_products.json"));
     List<ProductModel> prods =
-    data.map((data) => ProductModel.fromJson(data)).toList();
+        data.map((data) => ProductModel.fromJson(data)).toList();
     setState(() {
       _products = prods;
     });
@@ -86,27 +85,28 @@ class _CategoriesState extends State<Categories> {
   Widget build(BuildContext context) {
     return _products == null
         ? const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ))
+            body: Center(
+            child: CircularProgressIndicator(),
+          ))
         : ProductInfo(
-      cart: _cart,
-      products: _products!,
-      removeFromCart: _removeFromCart,
-      addToCart: _addToCart,
-      logoMap: _logoMap,
-      child: Scaffold(
-        appBar: const Navbar(),
-        body: Center(
-          child: Column(
-            children:  [Filter(), widget.content == "categories" ? Products() : SearchedProducts()],
-          ),
-        ),
-      ),
-    );
+            cart: _cart,
+            products: _products!,
+            removeFromCart: _removeFromCart,
+            addToCart: _addToCart,
+            logoMap: _logoMap,
+            child: Scaffold(
+              appBar: const Navbar(),
+              body: Center(
+                child: Column(
+                  children: [
+                    Filter(),
+                    widget.content == "categories"
+                        ? Products()
+                        : SearchedProducts()
+                  ],
+                ),
+              ),
+            ),
+          );
   }
 }
-
-
-
-
