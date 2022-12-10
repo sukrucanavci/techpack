@@ -125,7 +125,7 @@ void main() async {
     teknosa18,
     teknosa19,
     teknosa20,
-    teknosa21,
+    teknosa21
   ]);
 
   runApp(MaterialApp(

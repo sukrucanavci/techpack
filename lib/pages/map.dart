@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -9,11 +10,15 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' as Path;
 import 'dart:math' as math;
+import '../components/gradiantText.dart';
+import '../models/product_model.dart';
 import '../models/stores_model.dart';
 
 class MapPage extends StatefulWidget {
-  const MapPage({super.key, required this.storeLocations});
-  final List<Store> storeLocations;
+  const MapPage({super.key, required this.products, required this.totalPrice});
+  //final List<Store> storeLocations;
+  final List<ProductModel> products;
+  final num totalPrice;
 
   @override
   _MapPageViewState createState() => _MapPageViewState();
@@ -33,27 +38,12 @@ class _MapPageViewState extends State<MapPage> {
 
   // ignore: unused_field
   String _placeDistance = "0";
-  bool isLoading = false;
+  bool isLoading = true;
   Set<Marker> markers = {};
 
   late PolylinePoints polylinePoints;
   Map<PolylineId, Polyline> polylines = {};
   List<LatLng> polylineCoordinates = [];
-
-  Future<CameraPosition> findCenter() async {
-    double lat = 0;
-    double lng = 0;
-
-    for (var i = 0; i < widget.storeLocations.length; ++i) {
-      lat += double.parse(widget.storeLocations[i].latitude);
-      lng += double.parse(widget.storeLocations[i].longitude);
-    }
-
-    lat /= (widget.storeLocations.length);
-    lng /= (widget.storeLocations.length);
-
-    return CameraPosition(target: LatLng(lat, lng), zoom: 0.5);
-  }
 
   Future<BitmapDescriptor> _getStoreBitmapIcon(String name) async {
     if (name.contains("vatan")) {
@@ -86,18 +76,18 @@ class _MapPageViewState extends State<MapPage> {
       Marker startMarker;
       Marker destinationMarker;
 
-      for (int index = 0; index < widget.storeLocations.length - 1; index++) {
-        var startLat = double.parse(widget.storeLocations[index].latitude);
-        var startLong = double.parse(widget.storeLocations[index].longitude);
+      for (int index = 0; index < closestStores.length - 1; index++) {
+        var startLat = double.parse(closestStores[index].latitude);
+        var startLong = double.parse(closestStores[index].longitude);
 
         startMarker = Marker(
             markerId: MarkerId(index.toString()),
             position: LatLng(startLat, startLong),
             infoWindow: InfoWindow(
-              title: widget.storeLocations[index].name,
-              snippet: widget.storeLocations[index].address,
+              title: closestStores[index].name,
+              snippet: closestStores[index].address,
             ),
-            icon: await _getStoreBitmapIcon(widget.storeLocations[index].name));
+            icon: await _getStoreBitmapIcon(closestStores[index].name));
 
         markers.add(startMarker);
 
@@ -113,10 +103,10 @@ class _MapPageViewState extends State<MapPage> {
   }
 
   _createPolylines(int startIndex, int endIndex) async {
-    var startLat = double.parse(widget.storeLocations[startIndex].latitude);
-    var startLong = double.parse(widget.storeLocations[startIndex].longitude);
-    var endLat = double.parse(widget.storeLocations[endIndex].latitude);
-    var endLong = double.parse(widget.storeLocations[endIndex].longitude);
+    var startLat = double.parse(closestStores[startIndex].latitude);
+    var startLong = double.parse(closestStores[startIndex].longitude);
+    var endLat = double.parse(closestStores[endIndex].latitude);
+    var endLong = double.parse(closestStores[endIndex].longitude);
 
     polylinePoints = PolylinePoints();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
@@ -143,7 +133,7 @@ class _MapPageViewState extends State<MapPage> {
     polylines[id] = polyline;
   }
 
-  _showRoute() async {
+  Future _showRoute() async {
     startAddressFocusNode.unfocus();
     desrinationAddressFocusNode.unfocus();
 
@@ -159,6 +149,7 @@ class _MapPageViewState extends State<MapPage> {
         setState(() {
           isLoading = false;
         });
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Route is ready'),
@@ -172,6 +163,142 @@ class _MapPageViewState extends State<MapPage> {
         );
       }
     });
+  }
+
+  // -------------------------------------
+  Position _currentPosition = Position(
+      longitude: 28.7259004,
+      latitude: 40.9898818,
+      timestamp: DateTime.now(),
+      accuracy: 0,
+      altitude: 0,
+      heading: 0,
+      speed: 0,
+      speedAccuracy: 0);
+
+  List<Store> stores = [];
+  List<String> storeNamelist = [];
+  List<Store> closestStores = [];
+  double totalDistance = 0;
+
+  Future _findStoreNames() async {
+    for (var product in widget.products) {
+      if (storeNamelist.contains(product.vendor) == false) {
+        storeNamelist.add(product.vendor);
+      }
+    }
+    print(storeNamelist);
+  }
+
+  Future<void> _getStores() async {
+    final database = openDatabase(
+      Path.join(await getDatabasesPath(), 'techpack_database.db'),
+    );
+
+    final db = await database;
+
+    final List<Map<String, dynamic>> maps = await db.query('stores');
+
+    stores = List.generate(
+      maps.length,
+      (i) {
+        return Store(
+          id: maps[i]['id'],
+          name: maps[i]['name'],
+          latitude: maps[i]['latitude'],
+          longitude: maps[i]['longitude'],
+          address: maps[i]['address'],
+        );
+      },
+    );
+  }
+
+  Future<void> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    _currentPosition = await Geolocator.getCurrentPosition();
+  }
+
+  double _coordinateDistance(double lat2, double lon2) {
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 -
+        c((lat2 - _currentPosition.latitude) * p) / 2 +
+        c(_currentPosition.latitude * p) *
+            c(lat2 * p) *
+            (1 - c((lon2 - _currentPosition.longitude) * p)) /
+            2;
+    return 12742 * asin(sqrt(a));
+  }
+
+  Store findClosestStore(String vendor) {
+    double distance = 9999999;
+    Store returnStore = stores[0];
+
+    for (var store in stores) {
+      if (store.name.contains(vendor)) {
+        var storeDistance = _coordinateDistance(
+            double.parse(store.latitude), double.parse(store.longitude));
+        if (storeDistance < distance) {
+          distance = storeDistance;
+          returnStore = store;
+        }
+      }
+    }
+    setState(() {
+      totalDistance += distance;
+    });
+    return returnStore;
+  }
+
+  Future _determineClosestStores() async {
+    for (var storeName in storeNamelist) {
+      closestStores.add(findClosestStore(storeName));
+      print(closestStores);
+    }
+    closestStores.add(
+      Store(
+          id: 999,
+          name: "Konumum",
+          latitude: "${_currentPosition.latitude}",
+          longitude: "${_currentPosition.longitude}",
+          address: ""),
+    );
+  }
+
+  //-------------------------------------------
+
+  @override
+  void initState() {
+    _findStoreNames().then((value) => {
+          _determinePosition().then((value) => {
+                _getStores().then((value) => {
+                      _determineClosestStores().then((value) => {_showRoute()})
+                    })
+              })
+        });
+
+    super.initState();
   }
 
   @override
@@ -194,7 +321,7 @@ class _MapPageViewState extends State<MapPage> {
             },
           ),
           title: const Text(
-            "Selected Route",
+            "Route",
             style: TextStyle(color: Colors.purple),
           ),
           backgroundColor: Colors.white,
@@ -204,29 +331,45 @@ class _MapPageViewState extends State<MapPage> {
         key: _scaffoldKey,
         body: SafeArea(
           child: isLoading
-              ? const Center(
-                  child: CircularProgressIndicator(),
+              ? Center(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const [
+                      CircularProgressIndicator(color: Colors.purple),
+                      SizedBox(width: 12),
+                      GradientText(
+                        'Loading',
+                        style: TextStyle(fontSize: 26),
+                        gradient: LinearGradient(colors: [
+                          Color.fromARGB(255, 73, 21, 136),
+                          Color.fromARGB(255, 190, 118, 202),
+                        ]),
+                      ),
+                    ],
+                  ),
                 )
               : Stack(
-                  children: <Widget>[
+                  children: [
                     GoogleMap(
                       markers: Set<Marker>.from(markers),
                       myLocationEnabled: true,
                       myLocationButtonEnabled: true,
-                      mapType: MapType.normal,
                       zoomGesturesEnabled: true,
                       zoomControlsEnabled: true,
                       polylines: Set<Polyline>.of(polylines.values),
                       initialCameraPosition: CameraPosition(
                         target: LatLng(
-                          double.parse(widget.storeLocations.last.latitude),
-                          double.parse(widget.storeLocations.last.longitude),
+                          double.parse(closestStores.last.latitude),
+                          double.parse(closestStores.last.longitude),
                         ),
-                        zoom: 12,
+                        zoom: 8,
                       ),
                       onMapCreated: (GoogleMapController controller) {
                         mapController = controller;
-                        _showRoute();
+                        Timer(Duration(seconds: 1), () {
+                          mapController
+                              .animateCamera(CameraUpdate.zoomTo(11.5));
+                        });
                       },
                     ),
                   ],
