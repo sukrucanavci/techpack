@@ -519,3 +519,34 @@ var teknosa21 = Store(
     longitude: "28.7149909",
     address:
         "Üniversite Mh. E - 5 Yanyol Cd. No:42 Pelican Mall Alışveriş Merkezi Kat:B1 Mgz No:17, 34320 Avcılar");
+
+var teknosa22 = Store(
+    id: 67,
+    name: "teknosa Marmara Forum",
+    latitude: "40.9970529",
+    longitude: "28.8860995",
+    address:
+        "Osmaniye Mh. Çobançeşme Koşuyolu Blv. No:73/3 Pafta No:73/3 Ada No:1223 Parsel No:6 Mgz. No: MS 004B, 34146 Bakırköy");
+
+var teknosa23 = Store(
+    id: 68,
+    name: "teknosa Fatih",
+    latitude: "41.0142946",
+    longitude: "28.9451452",
+    address: "İskenderpaşa, Adnan Menderes Blv., 34080 Fatih/İstanbul");
+
+var teknosa24 = Store(
+    id: 69,
+    name: "teknosa Bayrampaşa",
+    latitude: "41.0469826",
+    longitude: "28.8961239",
+    address:
+        "Kocatepe Mh. Paşa Cd. No:3 Forum Istanbul AVM Mağaza No:B1-128-GF-48, 34045 Bayrampaşa/İstanbul");
+
+var teknosa25 = Store(
+    id: 69,
+    name: "teknosa ArmoniPark",
+    latitude: "41.0069453",
+    longitude: "28.7971813",
+    address:
+        "Tevfik Bey Mh. Halkalı Cd. No:132 Mgz. No: BB12, 34295 Küçükçekmece");
