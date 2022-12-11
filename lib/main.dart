@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:techpack/widget_tree.dart';
 import 'models/stores_data.dart';
@@ -131,7 +130,7 @@ Future<void> main() async {
     teknosa21
   ]);
 
-  runApp(GetMaterialApp(
+  runApp(MaterialApp(
       title: "tech pack",
       theme: ThemeData(
         primarySwatch: Colors.purple,

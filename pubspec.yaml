@@ -47,7 +47,6 @@ dependencies:
   html: ^0.15.1
   firebase_core: ^2.4.0
   firebase_auth: ^4.2.0
-  get: ^4.6.5
   cloud_firestore: ^4.2.0
   
 dev_dependencies:
