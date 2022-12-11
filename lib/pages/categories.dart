@@ -7,6 +7,8 @@ import 'package:techpack/components/products.dart';
 import 'package:techpack/components/searchedProducts.dart';
 import 'package:techpack/models/product_model.dart';
 import 'package:techpack/product_info.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:techpack/authentication/auth.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -35,6 +37,7 @@ class Categories extends StatefulWidget {
 class _CategoriesState extends State<Categories> {
   List<ProductModel>? _products;
   List<ProductModel> _cart = [];
+  final User? user = Auth().currentUser;
 
   final Map<String, String> _logoMap = {
     "itopya": "assets/images/104314.png",
@@ -50,6 +53,7 @@ class _CategoriesState extends State<Categories> {
       _getProducts();
     } else if (widget.content == "searched products") {
       setState(() {
+        print("${user?.email}");
         _products = widget.searchedProducts;
       });
       /* _products!.forEach((e) => print(
