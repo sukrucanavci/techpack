@@ -127,11 +127,11 @@ class _ProductPageState extends State<ProductPage> {
     return Scaffold(
         body: ListView(
       children: [
-        const SizedBox(height: 15),
+        const SizedBox(height: 10),
         Container(
-            padding: const EdgeInsets.only(right: 15,bottom: 15),
+            padding: const EdgeInsets.only(right: 15),
             width: MediaQuery.of(context).size.width-30,
-            height: MediaQuery.of(context).size.height-300,
+            height: MediaQuery.of(context).size.height-350,
             child: GridView.count(
               crossAxisCount: 2,
               primary: false,

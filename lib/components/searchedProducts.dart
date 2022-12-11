@@ -9,14 +9,10 @@ class SearchedProducts extends StatefulWidget {
   State<SearchedProducts> createState() => _SearchedProductsState();
 }
 
-class _SearchedProductsState extends State<SearchedProducts>
-
-    with SingleTickerProviderStateMixin {
+class _SearchedProductsState extends State<SearchedProducts>{
 
   @override
-
   Widget build(BuildContext context) {
-
     return Expanded(
       child: ListView(
         padding: const EdgeInsets.only(left: 20),
@@ -26,9 +22,9 @@ class _SearchedProductsState extends State<SearchedProducts>
                   fontSize: 40,
                   fontWeight: FontWeight.bold,
                   color: Colors.purple)),
-          const SizedBox(height: 15),
+          const SizedBox(height: 35),
           SizedBox(
-            height: MediaQuery.of(context).size.height -100,
+            height: MediaQuery.of(context).size.height -50,
             width: double.infinity,
             child: const ProductPage(category:"search"),
           )

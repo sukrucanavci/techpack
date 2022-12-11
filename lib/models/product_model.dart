@@ -26,4 +26,15 @@ class ProductModel {
         id: product["id"],
         image: product["image"]);
   }
+
+  // Remove the logoMap from categories widget later
+  String? logoMapper(){
+    final Map<String, String> logoMap = {
+      "itopya": "assets/images/104314.png",
+      "vatan bilgisayar": "assets/images/Vatan_Computer.jpg",
+      "teknosa": "assets/images/TEKnosa.png",
+      "media markt": "assets/images/Media_Markt_red_textmark.png"
+    };
+    return logoMap[vendor];
+  }
 }

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:techpack/pages/mainpage.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:techpack/widget_tree.dart';
 import 'models/stores_data.dart';
 import 'models/stores_model.dart';
 import 'package:path/path.dart' as Path;
+import 'package:firebase_core/firebase_core.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
 
   final database = openDatabase(
     Path.join(await getDatabasesPath(), 'techpack_database.db'),
@@ -152,7 +154,7 @@ class _MyAppState extends State<MyApp> {
       const Duration(seconds: 3),
       () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Mainpage()));
+            context, MaterialPageRoute(builder: (context) => const WidgetTree()));
       },
     );
   }
