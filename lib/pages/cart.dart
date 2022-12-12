@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:techpack/models/product_model.dart';
 import 'package:techpack/pages/map.dart';
+import 'package:location/location.dart';
 
 class Cart extends StatefulWidget {
   final List<ProductModel> cart;
@@ -23,10 +24,17 @@ class _CartState extends State<Cart> {
   Map<ProductModel, int> quantityMap = {};
   num total = 0;
 
+  Location location = Location();
+  Future _checkGps() async {
+    if (!await location.serviceEnabled()) {
+      location.requestService();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-
+    _checkGps();
     setState(() {
       widget.cart.forEach((productInCart) {
         if (!quantityMap.containsKey(productInCart)) {
