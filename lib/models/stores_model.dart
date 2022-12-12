@@ -7,13 +7,15 @@ class Store {
   final String latitude; // enlem
   final String longitude; // boylam
   final String address;
+  double distance;
 
-  const Store(
+  Store(
       {required this.id,
       required this.name,
       required this.latitude,
       required this.longitude,
-      required this.address});
+      required this.address,
+      this.distance = 0});
 
   Map<String, dynamic> toMap() {
     return {

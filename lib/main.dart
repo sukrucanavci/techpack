@@ -127,7 +127,11 @@ Future<void> main() async {
     teknosa18,
     teknosa19,
     teknosa20,
-    teknosa21
+    teknosa21,
+    teknosa22,
+    teknosa23,
+    teknosa24,
+    teknosa25,
   ]);
 
   runApp(MaterialApp(
