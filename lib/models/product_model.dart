@@ -27,6 +27,17 @@ class ProductModel {
         image: product["image"]);
   }
 
+  Map<String,dynamic> toJson() {
+    return {
+      'title':title,
+      'category':category,
+      'price':price,
+      'vendor':vendor,
+      'id':id,
+      'image':image
+    };
+  }
+
   // Remove the logoMap from categories widget later
   String? logoMapper(){
     final Map<String, String> logoMap = {

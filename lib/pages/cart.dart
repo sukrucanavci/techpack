@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:techpack/models/product_model.dart';
 import 'package:techpack/pages/map.dart';
+import '../authentication/auth.dart';
 
 class Cart extends StatefulWidget {
   final List<ProductModel> cart;
@@ -62,6 +64,26 @@ class _CartState extends State<Cart> {
         quantityMap[product] = quantityMap[product]! - 1;
       }
     });
+  }
+
+  Future createPastBasket({required Map<ProductModel, int> quantityMap,required num total}) async {
+    final docPastBasket = FirebaseFirestore.instance.collection('past-baskets').doc();
+
+    final basket = {
+      "id":docPastBasket.id,
+      "user":Auth().currentUser?.uid,
+      "total":total,
+      "timestamp":DateTime.now(),
+      "content":[
+        for (final entry in quantityMap.entries)
+          {
+            "product":entry.key.toJson(),
+            "quantity":entry.value
+          },
+      ]
+    };
+
+    await docPastBasket.set(basket);
   }
 
   Widget _buildCard(MapEntry<ProductModel, int> entry) {
@@ -218,7 +240,8 @@ class _CartState extends State<Cart> {
             Container(
               margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
               child: FloatingActionButton(
-                onPressed: () {
+                onPressed: ()  {
+                  createPastBasket(quantityMap: quantityMap, total: total);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
