@@ -29,7 +29,7 @@ class _ProductsState extends State<Products>
                   fontSize: 40,
                   fontWeight: FontWeight.bold,
                   color: Colors.purple)),
-          const SizedBox(height: 15),
+          const SizedBox(height: 10),
           TabBar(
               controller: _tabController,
               indicatorColor: Colors.transparent,
