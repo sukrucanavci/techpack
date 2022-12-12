@@ -1,10 +1,12 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart' as Path;
 import 'package:sqflite/sqflite.dart';
+
 import 'package:techpack/widget_tree.dart';
+
 import 'models/stores_data.dart';
 import 'models/stores_model.dart';
-import 'package:path/path.dart' as Path;
-import 'package:firebase_core/firebase_core.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -127,7 +129,11 @@ Future<void> main() async {
     teknosa18,
     teknosa19,
     teknosa20,
-    teknosa21
+    teknosa21,
+    teknosa22,
+    teknosa23,
+    teknosa24,
+    teknosa25,
   ]);
 
   runApp(MaterialApp(
@@ -153,8 +159,8 @@ class _MyAppState extends State<MyApp> {
     Future.delayed(
       const Duration(seconds: 3),
       () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const WidgetTree()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const WidgetTree()));
       },
     );
   }
