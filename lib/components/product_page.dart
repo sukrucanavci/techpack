@@ -3,7 +3,8 @@ import 'package:techpack/models/product_model.dart';
 import 'package:techpack/product_info.dart';
 
 class ProductPage extends StatefulWidget {
-  const ProductPage({super.key, required this.category});
+  final bool isCategory;
+  const ProductPage({super.key, required this.category, required this.isCategory});
 
   final String category;
 
@@ -131,7 +132,7 @@ class _ProductPageState extends State<ProductPage> {
         Container(
             padding: const EdgeInsets.only(right: 15),
             width: MediaQuery.of(context).size.width-30,
-            height: MediaQuery.of(context).size.height-350,
+            height: widget.isCategory ? MediaQuery.of(context).size.height-350 : MediaQuery.of(context).size.height-300,
             child: GridView.count(
               crossAxisCount: 2,
               primary: false,

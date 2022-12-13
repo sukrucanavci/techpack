@@ -189,8 +189,11 @@ class _MainpageState extends State<Mainpage> {
   }
 
   Future<List<Map<String, dynamic>>> readPastBaskets() async {
-    var records =
-        await FirebaseFirestore.instance.collection("past-baskets").get();
+    setState(() {
+      isLoadingActive = true;
+    });
+
+    var records = await FirebaseFirestore.instance.collection("past-baskets").where("user",isEqualTo:Auth().currentUser?.uid).orderBy("timestamp",descending: true).limit(3).get();
 
     var list = records.docs
         .map((record) => {
@@ -201,6 +204,10 @@ class _MainpageState extends State<Mainpage> {
               "content": record.data()["content"],
             })
         .toList();
+
+    setState(() {
+      isLoadingActive = false;
+    });
 
     return list;
   }
@@ -230,11 +237,14 @@ class _MainpageState extends State<Mainpage> {
                   children: [
                     const SizedBox(height: 70),
                     Text(
-                        "Logged in as ${Auth().currentUser?.email ?? 'User email'}"),
+                        "Logged in as ${Auth().currentUser?.email ?? 'User email'}",style: const TextStyle(color: Colors.purple)),
                     const SizedBox(
                       height: 30,
                     ),
-                    Image.asset('assets/logo.jpg'),
+                    Image.asset('assets/logo.jpg',height:150,width: 300,),
+                    const SizedBox(
+                      height: 15,
+                    ),
                     Container(
                       width: 300.0,
                       child: TextField(
@@ -279,6 +289,9 @@ class _MainpageState extends State<Mainpage> {
                               ])),
                         ),
                       ),
+                    ),
+                    const SizedBox(
+                      height: 15,
                     ),
                     Center(
                         child: Row(

@@ -15,6 +15,7 @@ class _AuthPageState extends State<AuthPage> {
 
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
+  final formKey = GlobalKey<FormState>();
 
   Future<void> signInWithEmailAndPassword() async {
     try {
@@ -45,33 +46,59 @@ class _AuthPageState extends State<AuthPage> {
             height: double.infinity,
             width: double.infinity,
             padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextField(
-                    controller: _controllerEmail,
-                    decoration: const InputDecoration(labelText: "Email")),
-                TextField(
-                    controller: _controllerPassword,
-                    decoration: const InputDecoration(labelText: "Password")),
-                Text(errorMessage == "" ? "" : "Humm ? $errorMessage"),
-                ElevatedButton(
-                    onPressed: ()  {
-                      isLogin
-                          ? signInWithEmailAndPassword()
-                          : createUserWithEmailAndPassword();
-                    },
-                    child: Text(isLogin ? "Login" : "Register")),
-                TextButton(
-                    onPressed: () {
-                      setState(() {
-                        isLogin = !isLogin;
-                      });
-                    },
-                    child:
-                        Text(isLogin ? "Register instead" : "Login instead")),
-              ],
+            child: Form(
+              key:formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset('assets/logo.jpg',width: 200,height: 100,),
+                  TextFormField(
+                      controller: _controllerEmail,
+                      decoration: const InputDecoration(labelText: "Email"),
+                      validator: (value) {
+                          if (value!.isEmpty) {
+                            return "This field is required";
+                          } else {
+                            return null;
+                          }
+                      },
+                  ),
+                  TextFormField(
+                      controller: _controllerPassword,
+                      obscureText:true,
+                      decoration: const InputDecoration(labelText: "Password"),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "This field is required";
+                        } else {
+                          return null;
+                        }
+                      },
+                  ),
+                  const SizedBox(height: 25,),
+                  Text(errorMessage == "" ? "" : "Humm ? $errorMessage"),
+                  const SizedBox(height: 25,),
+                  ElevatedButton(
+                      onPressed: ()  {
+                        final isValid = formKey.currentState?.validate();
+                        if (isValid == true) {
+                          isLogin
+                              ? signInWithEmailAndPassword()
+                              : createUserWithEmailAndPassword();
+                        }
+                      },
+                      child: Text(isLogin ? "Login" : "Register")),
+                  TextButton(
+                      onPressed: () {
+                        setState(() {
+                          isLogin = !isLogin;
+                        });
+                      },
+                      child:
+                          Text(isLogin ? "Register instead" : "Login instead")),
+                ],
+              ),
             )));
   }
 }
