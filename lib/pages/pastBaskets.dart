@@ -17,9 +17,8 @@ class _pastBaskets extends State<pastBaskets> {
   @override
   void initState() {
     widget.baskets.forEach((element) {
-      if(Auth().currentUser?.uid.toString()==element["user"].toString()){
-        element["content"].forEach((element) => print(element["product"]["title"]));
-      }
+        //element["content"].forEach((element) => print(element["product"]["title"]));
+      print("${element['timestamp']} , ${element['user']}");
     });
     super.initState();
   }

@@ -62,11 +62,11 @@ class _ProductsState extends State<Products>
           SizedBox(
             height: MediaQuery.of(context).size.height-100,
             width: double.infinity,
-            child: TabBarView(controller: _tabController, children: const [
-              ProductPage(category:"laptop"),
-              ProductPage(category:"monitor"),
-              ProductPage(category:"graphics card"),
-              ProductPage(category:"headset"),
+            child: TabBarView(controller: _tabController, children: const[
+              ProductPage(category:"laptop",isCategory:true),
+              ProductPage(category:"monitor",isCategory:true),
+              ProductPage(category:"graphics card",isCategory:true),
+              ProductPage(category:"headset",isCategory:true),
             ]),
           )
         ],

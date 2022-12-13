@@ -22,11 +22,10 @@ class _SearchedProductsState extends State<SearchedProducts>{
                   fontSize: 40,
                   fontWeight: FontWeight.bold,
                   color: Colors.purple)),
-          const SizedBox(height: 35),
           SizedBox(
-            height: MediaQuery.of(context).size.height -50,
+            height: MediaQuery.of(context).size.height -100,
             width: double.infinity,
-            child: const ProductPage(category:"search"),
+            child: const ProductPage(category:"search",isCategory:false),
           )
         ],
       ),

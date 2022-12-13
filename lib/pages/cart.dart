@@ -127,7 +127,7 @@ class _CartState extends State<Cart> {
                 child: Column(
                   children: [
                     Text(
-                      entry.key.title,
+                      entry.key.title.length>=50 ? "${entry.key.title.substring(0,50)}..." : entry.key.title,
                       style: const TextStyle(
                           color: Colors.deepPurple, fontSize: 14),
                       textAlign: TextAlign.center,
