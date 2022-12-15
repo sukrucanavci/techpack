@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:techpack/components/product_page.dart';
-
-import '../authentication/auth.dart';
 
 
 class pastBaskets extends StatefulWidget {

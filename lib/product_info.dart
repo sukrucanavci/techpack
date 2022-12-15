@@ -8,15 +8,13 @@ class ProductInfo extends InheritedWidget {
       required this.products,
       required this.cart,
       required this.addToCart,
-      required this.removeFromCart,
-      required this.logoMap})
+      required this.removeFromCart})
       : super(key: key, child: child);
 
   final List<ProductModel> products;
   final List<ProductModel> cart;
   final void Function(ProductModel product) addToCart;
   final void Function(ProductModel product) removeFromCart;
-  final Map<String, String> logoMap;
 
   static ProductInfo of(BuildContext context) {
     final ProductInfo? result =
@@ -30,7 +28,6 @@ class ProductInfo extends InheritedWidget {
     return oldWidget.products != products ||
         oldWidget.cart != cart ||
         oldWidget.addToCart != addToCart ||
-        oldWidget.removeFromCart != removeFromCart ||
-        oldWidget.logoMap != logoMap;
+        oldWidget.removeFromCart != removeFromCart ;
   }
 }

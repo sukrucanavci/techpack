@@ -20,13 +20,6 @@ class Categories extends StatefulWidget {
 class _CategoriesState extends State<Categories> {
   List<ProductModel> _cart = [];
 
-  final Map<String, String> _logoMap = {
-    "itopya": "assets/images/104314.png",
-    "vatan bilgisayar": "assets/images/Vatan_Computer.jpg",
-    "teknosa": "assets/images/TEKnosa.png",
-    "media markt": "assets/images/Media_Markt_red_textmark.png"
-  };
-
   void _addToCart(ProductModel product) {
     setState(() {
       _cart = [..._cart, product];
@@ -47,7 +40,6 @@ class _CategoriesState extends State<Categories> {
             products: widget.products,
             removeFromCart: _removeFromCart,
             addToCart: _addToCart,
-            logoMap: _logoMap,
             child: Scaffold(
               appBar: const Navbar(),
               body: Center(

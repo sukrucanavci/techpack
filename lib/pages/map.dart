@@ -317,6 +317,13 @@ class _MapPageViewState extends State<MapPage> {
           backgroundColor: Colors.white,
           toolbarHeight: 60,
           elevation: 0,
+          actions: [
+            IconButton(onPressed: (){
+              for(int i=0;i<3;i++) {
+                Navigator.pop(context);
+              }
+            }, icon: Icon(Icons.home,color: Colors.purple,))
+          ],
         ),
         key: _scaffoldKey,
         body: SafeArea(
