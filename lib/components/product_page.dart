@@ -41,7 +41,7 @@ class _ProductPageState extends State<ProductPage> {
                         decoration: BoxDecoration(
                             image: DecorationImage(
                                 image: AssetImage(
-                                    productInfo.logoMap[product.vendor]!),
+                                    product.logoMapper()!),
                                 fit: BoxFit.contain)),
                       ),
                     ],
@@ -132,7 +132,7 @@ class _ProductPageState extends State<ProductPage> {
         Container(
             padding: const EdgeInsets.only(right: 15),
             width: MediaQuery.of(context).size.width-30,
-            height: widget.isCategory ? MediaQuery.of(context).size.height-350 : MediaQuery.of(context).size.height-300,
+            height: widget.isCategory ? MediaQuery.of(context).size.height-345 : MediaQuery.of(context).size.height-300,
             child: GridView.count(
               crossAxisCount: 2,
               primary: false,

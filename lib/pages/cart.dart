@@ -7,14 +7,12 @@ import 'package:location/location.dart';
 
 class Cart extends StatefulWidget {
   final List<ProductModel> cart;
-  final Map<String, String> logoMap;
   final void Function(ProductModel product) addToCart;
   final void Function(ProductModel product) removeFromCart;
 
   const Cart(
       {super.key,
       required this.cart,
-      required this.logoMap,
       required this.addToCart,
       required this.removeFromCart});
 
@@ -155,7 +153,7 @@ class _CartState extends State<Cart> {
                   width: 60,
                   decoration: BoxDecoration(
                       image: DecorationImage(
-                          image: AssetImage(widget.logoMap[entry.key.vendor]!),
+                          image: AssetImage(entry.key.logoMapper()!),
                           fit: BoxFit.contain)),
                 ),
                 const SizedBox(
@@ -246,7 +244,7 @@ class _CartState extends State<Cart> {
               ],
             ),
             Container(
-              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
               child: FloatingActionButton(
                 onPressed: ()  {
                   createPastBasket(quantityMap: quantityMap, total: total);

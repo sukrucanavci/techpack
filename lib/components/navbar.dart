@@ -42,7 +42,6 @@ class _NavbarState extends State<Navbar> {
                   delegate: ProductSearchDelegate(
                     products: productInfo.products,
                     cart: productInfo.cart,
-                    logoMap: productInfo.logoMap,
                   ));
             },
             icon: const Icon(
@@ -59,7 +58,6 @@ class _NavbarState extends State<Navbar> {
                       .push(MaterialPageRoute(builder: (context) {
                     return Cart(
                       cart: productInfo.cart,
-                      logoMap: productInfo.logoMap,
                       addToCart: productInfo.addToCart,
                       removeFromCart: productInfo.removeFromCart,
                     );

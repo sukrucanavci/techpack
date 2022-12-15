@@ -35,7 +35,7 @@ class _MainpageState extends State<Mainpage> {
     return url;
   }
 
-  List<ProductModel> scraper(String vendor, http.Response response) {
+  List<ProductModel>? scraper(String vendor, http.Response response) {
     List<String> titles = [];
     List<String> prices = [];
     List<String> images = [];
@@ -43,132 +43,140 @@ class _MainpageState extends State<Mainpage> {
     List<ProductModel> searchedProducts = [];
     dom.Document html = dom.Document.html(response.body);
 
-    if (vendor == "teknosa" &&
-        html.querySelectorAll('#product-item > a.prd-link').isNotEmpty) {
-      titles = html
-          .querySelectorAll('#product-item > a.prd-link')
-          .take(4)
-          .map((e) => e.attributes['title']!)
-          .toList();
+    try{
 
-      prices = html
-          .querySelectorAll('#product-item')
-          .take(4)
-          .map((e) => e.attributes['data-product-price']!)
-          .toList();
+      if (vendor == "teknosa" && html.querySelectorAll('#product-item > a.prd-link').isNotEmpty) {
+        titles = html
+            .querySelectorAll('#product-item > a.prd-link')
+            .take(4)
+            .map((e) => e.attributes['title']!)
+            .toList();
 
-      images = html
-          .querySelectorAll(
-              '#product-item > div > div.prd-media > figure > img')
-          .take(4)
-          .map((e) => e.attributes['data-srcset']!)
-          .toList();
-    } else if (vendor == "vatan bilgisayar" &&
-        html
+        prices = html
+            .querySelectorAll('#product-item')
+            .take(4)
+            .map((e) => e.attributes['data-product-price']!)
+            .toList();
+
+        images = html
             .querySelectorAll(
-                "div.product-list__content > a > div.product-list__product-name > h3")
-            .isNotEmpty) {
-      titles = html
-          .querySelectorAll(
-              "div.product-list__content > a > div.product-list__product-name > h3")
-          .take(4)
-          .map((e) => e.innerHtml.trim())
-          .toList();
+            '#product-item > div > div.prd-media > figure > img')
+            .take(4)
+            .map((e) => e.attributes['data-srcset']!)
+            .toList();
+      } else if (vendor == "vatan bilgisayar" && html.querySelectorAll("div.product-list__content > a > div.product-list__product-name > h3").isNotEmpty) {
+        titles = html.querySelectorAll(
+            "div.product-list__content > a > div.product-list__product-name > h3")
+            .take(4)
+            .map((e) => e.innerHtml.trim())
+            .toList();
 
-      prices = html
-          .querySelectorAll(
-              "div.product-list__content > div.product-list__cost > span.product-list__price")
-          .take(4)
-          .map((e) {
-        String price = e.innerHtml.trim();
-        String formattedPrice = price.replaceAll(".", "");
-        return formattedPrice;
-      }).toList();
-
-      images = html
-          .querySelectorAll(
-              "div.product-list__image-safe > a > div:nth-child(1) > img")
-          .take(4)
-          .map((e) => e.attributes["data-src"]!)
-          .toList();
-    } else if (vendor == "itopya" &&
-        html
+        prices = html
             .querySelectorAll(
-                "#productList > div.product > div.product-body > a")
-            .isNotEmpty) {
-      titles = html
-          .querySelectorAll("#productList > div.product > div.product-body > a")
-          .take(4)
-          .map((e) => e.innerHtml.trim())
-          .toList();
+            "div.product-list__content > div.product-list__cost > span.product-list__price")
+            .take(4)
+            .map((e) {
+          String price = e.innerHtml.trim();
+          String formattedPrice = price.replaceAll(".", "");
+          return formattedPrice;
+        }).toList();
 
-      prices = html
-          .querySelectorAll(
-              "#productList > div.product > div.product-footer > div.price > strong")
-          .take(4)
-          .map((e) {
-        String price = e.innerHtml.trim();
-        String formattedPrice = price.substring(0, price.indexOf(","));
-        String formattedPrice2 = formattedPrice.replaceAll(".", "");
-        return formattedPrice2;
-      }).toList();
+        images = html
+            .querySelectorAll(
+            "div.product-list__image-safe > a > div:nth-child(1) > img")
+            .take(4)
+            .map((e) => e.attributes["data-src"]!)
+            .toList();
+      } else if (vendor == "itopya" && html.querySelectorAll("#productList > div.product > div.product-body > a").isNotEmpty) {
+        titles = html
+            .querySelectorAll("#productList > div.product > div.product-body > a")
+            .take(4)
+            .map((e) => e.innerHtml.trim())
+            .toList();
 
-      images = html
-          .querySelectorAll(
-              "#productList > div.product > div.product-header > a.image > img")
-          .take(4)
-          .map((e) => e.attributes["data-src"]!)
-          .toList();
+        prices = html
+            .querySelectorAll(
+            "#productList > div.product > div.product-footer > div.price > strong")
+            .take(4)
+            .map((e) {
+          String price = e.innerHtml.trim();
+          String formattedPrice = price.substring(0, price.indexOf(","));
+          String formattedPrice2 = formattedPrice.replaceAll(".", "");
+          return formattedPrice2;
+        }).toList();
+
+        images = html
+            .querySelectorAll(
+            "#productList > div.product > div.product-header > a.image > img")
+            .take(4)
+            .map((e) => e.attributes["data-src"]!)
+            .toList();
+      }
+
+      for (int i = 0; i < titles.length; i++) {
+        searchedProducts.add(ProductModel(
+            title: titles[i],
+            category: "search",
+            price: double.parse(prices[i]),
+            vendor: vendor,
+            id: rnd.nextInt(10000),
+            image: images[i]));
+      }
+
+      return searchedProducts;
+
+
+    }catch(e){
+      print(e.toString());
+      return null;
     }
 
-    for (int i = 0; i < titles.length; i++) {
-      searchedProducts.add(ProductModel(
-          title: titles[i],
-          category: "search",
-          price: double.parse(prices[i]!),
-          vendor: vendor,
-          id: rnd.nextInt(10000),
-          image: images[i]));
-    }
-
-    return searchedProducts;
   }
 
-  Future<List<ProductModel>> extractData(String query, String vendor) async {
+  Future<List<ProductModel>?> extractData(String query, String vendor) async {
     List<ProductModel> products = [];
     final response = await http.get(Uri.parse(queryBuilder(query, vendor)));
 
-    if (response.statusCode == 200) {
-      products = scraper(vendor, response);
+    try{
+      if (response.statusCode == 200) {
+        products = scraper(vendor, response)!;
+        return products;
+      }
+      print('Error: ${response.statusCode}.');
       return products;
+
+    }catch(e){
+      return null;
     }
 
-    print('Error: ${response.statusCode}.');
-    return products;
   }
 
-  Future<List<ProductModel>> getSearchProducts(String value) async {
+  Future<List<ProductModel>?> getSearchProducts(String value) async {
     List<ProductModel> allResults = [];
 
-    setState(() {
-      isLoadingActive = true;
-    });
+    try {
+      setState(() {
+        isLoadingActive = true;
+      });
 
-    final teknosaResults = await extractData(value, "teknosa");
-    final itopyaResults = await extractData(value, "itopya");
-    final vatanResults = await extractData(value, "vatan bilgisayar");
-    final mmResults = await extractData(value, "media markt");
+      final teknosaResults = await extractData(value, "teknosa");
+      final itopyaResults = await extractData(value, "itopya");
+      final vatanResults = await extractData(value, "vatan bilgisayar");
 
-    allResults.addAll(teknosaResults);
-    allResults.addAll(itopyaResults);
-    allResults.addAll(vatanResults);
-    allResults.addAll(mmResults);
+      setState(() {
+        isLoadingActive = false;
+      });
 
-    setState(() {
-      isLoadingActive = false;
-    });
+      allResults.addAll(teknosaResults!);
+      allResults.addAll(itopyaResults!);
+      allResults.addAll(vatanResults!);
 
-    return allResults;
+      return allResults;
+
+    }catch(e){
+      return null;
+    }
+
   }
 
   Future<List<ProductModel>> getCategoriesProducts() async {
@@ -249,10 +257,10 @@ class _MainpageState extends State<Mainpage> {
                       width: 300.0,
                       child: TextField(
                         onSubmitted: (value) async {
-                          List<ProductModel> searchProducts =
+                          List<ProductModel>? searchProducts =
                               await getSearchProducts(value);
 
-                          if (searchProducts.isEmpty) {
+                          if (searchProducts == null) {
                             final error = SnackBar(
                               content: const Text(
                                   'We couldn\'t find any results 🙁'),
@@ -264,7 +272,19 @@ class _MainpageState extends State<Mainpage> {
 
                             // ignore: use_build_context_synchronously
                             ScaffoldMessenger.of(context).showSnackBar(error);
-                          } else {
+                          } else if (searchProducts.isEmpty){
+                            final error = SnackBar(
+                              content: const Text(
+                                  'We couldn\'t find any results 🙁'),
+                              action: SnackBarAction(
+                                label: 'Close',
+                                onPressed: () {},
+                              ),
+                            );
+
+                            // ignore: use_build_context_synchronously
+                            ScaffoldMessenger.of(context).showSnackBar(error);
+                          }else {
                             // ignore: use_build_context_synchronously
                             Navigator.push(
                               context,

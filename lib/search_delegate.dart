@@ -4,10 +4,9 @@ import 'package:techpack/models/product_model.dart';
 class ProductSearchDelegate extends SearchDelegate {
   final List<ProductModel> products;
   final List<ProductModel> cart;
-  final Map<String, String> logoMap;
 
   ProductSearchDelegate(
-      {required this.products, required this.cart, required this.logoMap});
+      {required this.products, required this.cart});
 
   @override
   ThemeData appBarTheme(BuildContext context) {
@@ -143,7 +142,7 @@ class ProductSearchDelegate extends SearchDelegate {
                             width: 60,
                             decoration: BoxDecoration(
                                 image: DecorationImage(
-                                    image: AssetImage(logoMap[result.vendor]!),
+                                    image: AssetImage(result.logoMapper()!),
                                     fit: BoxFit.contain)),
                           ),
                         ],
@@ -264,7 +263,7 @@ class ProductSearchDelegate extends SearchDelegate {
                             width: 60,
                             decoration: BoxDecoration(
                                 image: DecorationImage(
-                                    image: AssetImage(logoMap[result.vendor]!),
+                                    image: AssetImage(result.logoMapper()!),
                                     fit: BoxFit.contain)),
                           ),
                         ],
