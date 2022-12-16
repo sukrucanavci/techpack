@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:techpack/models/product_model.dart';
 import 'package:techpack/product_info.dart';
 
+
+
 class ProductPage extends StatefulWidget {
   final bool isCategory;
   const ProductPage({super.key, required this.category, required this.isCategory});
@@ -11,6 +13,7 @@ class ProductPage extends StatefulWidget {
   @override
   State<ProductPage> createState() => _ProductPageState();
 }
+
 
 class _ProductPageState extends State<ProductPage> {
   Widget _buildCard(ProductModel product, context) {
@@ -122,7 +125,10 @@ class _ProductPageState extends State<ProductPage> {
             )));
   }
 
+
   @override
+
+
   Widget build(BuildContext context) {
     final productInfo = ProductInfo.of(context);
     return Scaffold(
@@ -149,3 +155,143 @@ class _ProductPageState extends State<ProductPage> {
     ));
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

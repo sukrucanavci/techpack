@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:techpack/components/product_page.dart';
 
-import '../authentication/auth.dart';
-import '../models/product_model.dart';
+// ignore_for_file: camel_case_types
+
+import 'package:flutter/material.dart';
+import '../components/pastBasketsDetail.dart';
+
 
 
 class pastBaskets extends StatefulWidget {
@@ -15,71 +16,126 @@ class pastBaskets extends StatefulWidget {
   State<pastBaskets> createState() => _pastBaskets();
 }
 class _pastBaskets extends State<pastBaskets> {
+  bool selected = false;
   Map<String, dynamic> quantityMap = {};
 
-  @override
-
   Widget _buildCard(Map<String, dynamic> pastbasket) {
-    print(pastbasket["content"]);
-    return Padding(
-        padding: const EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 5),
-        child: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      spreadRadius: 3,
-                      blurRadius: 5)
-                ],
-                color: Colors.white),
+
+    String datetime =  "${pastbasket["timestamp"].day}/${pastbasket["timestamp"].month}/${pastbasket["timestamp"].year}";
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+            side: const BorderSide(color: Colors.black26, width: 2),
+          ),
+          child: InkWell(
+            onTap: () {
+              setState(() {
+                selected = !selected;
+              },
+              );
+            },
+
             child: Column(
               children: [
-                 /*Container(
-                  height: 75,
-                  width: 75,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage(pastbasket["content"]["product"]["title"].toString()),
-                          fit: BoxFit.contain)),
-                ),*/
-                const SizedBox(height: 6),
-                Text(
-                  "${(pastbasket["total"].toString())} ₺",
-                  style: const TextStyle(
-                      color: Colors.deepPurple,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 6),
+                const SizedBox(height: 10),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: Text(
-                    "${(pastbasket["timestamp"].toString())} ₺",
-                    style:
-                    const TextStyle(color: Colors.deepPurple, fontSize: 14),
-                    textAlign: TextAlign.center,
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children:[
+                      Text(
+                        "$datetime ",
+                        style:
+                        const TextStyle(color: Colors.deepPurple, fontSize: 15),
+                        textAlign: TextAlign.left,
+                      ),
+                      Text(
+                        "Tutar : ${(pastbasket["total"].toString())} ₺",
+                        style: const TextStyle(
+                            color: Colors.deepPurple,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.right,
+                  ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 6),
                 Padding(
-                  padding: const EdgeInsets.only(left: 5, right: 5),
-                  child: Text(
-                    "${(pastbasket["total"].toString())} ₺",
-                    style:
-                    const TextStyle(color: Colors.deepPurple, fontSize: 14),
-                    textAlign: TextAlign.center,
-                  ),
+                  padding: const EdgeInsets.only(top:10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      for(int i =0; i<2;i++)
+                        _buildimages( pastbasket["content"][i]), //for(final entry in pastbasket["content"]) ,
+                     Text(
+                         (pastbasket["content"].length) > 3
+                             ? "+ ${pastbasket["content"].length -2}"
+                             : " ",
+                       style: const TextStyle(
+                           color: Colors.deepPurple,
+                           fontSize: 14,
+                           fontWeight: FontWeight.bold),)
+                     // if (pastbasket["content"].length)
 
-                )
+                    ],
+                  ),
+                ),
+                Padding(
+                    padding: const EdgeInsets.only(right: 2),
+                    child: Row (
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                builder: (context) => pastBasketsDetail(basket: pastbasket)));
+                          },
+                          child: const Padding(
+                        padding: EdgeInsets.all(10.0),
+                            child: Text(
+                              "Detay >>",
+                              style: TextStyle(
+                                  color: Colors.deepPurple,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.right,
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+                ),
               ],
-            )));
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
+
+  Widget _buildimages(Map<String, dynamic> content) {
+    return Container(
+      height: 60,
+      width: 80,
+      decoration: BoxDecoration(
+          image: DecorationImage(
+              image: (content["product"]["category"].toString() == "search"
+                  ? NetworkImage(
+                  content["product"]["image"].toString())
+                  : AssetImage(
+                  content["product"]["image"].toString()) as ImageProvider),
+              fit: BoxFit.contain)),
+    );
+  }
   @override
   Widget build(BuildContext context) {
-    bool selected = false;
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -95,19 +151,131 @@ class _pastBaskets extends State<pastBaskets> {
         centerTitle: false,
         backgroundColor: Colors.white,
       ),
-        body: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-        Expanded(
-        child: ListView(
+
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          for(final entry in widget.baskets) _buildCard(entry),
-    ],
-    )),]
-      )
+          Expanded(
+            child: ListView(
+              children: [
+                for(final entry in widget.baskets) _buildCard(entry),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
