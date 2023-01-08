@@ -38,7 +38,6 @@ class ProductModel {
     };
   }
 
-  // Remove the logoMap from categories widget later
   String? logoMapper(){
     final Map<String, String> logoMap = {
       "itopya": "assets/images/104314.png",

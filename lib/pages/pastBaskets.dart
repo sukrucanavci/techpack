@@ -1,146 +1,124 @@
-
-// ignore_for_file: camel_case_types
-
 import 'package:flutter/material.dart';
-import '../components/pastBasketsDetail.dart';
+import 'pastBasketsDetail.dart';
 
-
-
-class pastBaskets extends StatefulWidget {
-
+class PastBaskets extends StatefulWidget {
   final List<Map<String, dynamic>> baskets;
-  const pastBaskets({super.key, required this.baskets});
+  const PastBaskets({super.key, required this.baskets});
 
   @override
-
-  State<pastBaskets> createState() => _pastBaskets();
+  State<PastBaskets> createState() => _PastBaskets();
 }
-class _pastBaskets extends State<pastBaskets> {
-  bool selected = false;
-  Map<String, dynamic> quantityMap = {};
+
+class _PastBaskets extends State<PastBaskets> {
 
   Widget _buildCard(Map<String, dynamic> pastbasket) {
+    String datetime =
+        "${pastbasket["timestamp"].day}/${pastbasket["timestamp"].month}/${pastbasket["timestamp"].year} , ${pastbasket["timestamp"].hour.toString().length == 1 ? "0${pastbasket["timestamp"].hour}" : pastbasket["timestamp"].hour}:${pastbasket["timestamp"].minute.toString().length == 1 ? "0${pastbasket["timestamp"].minute}" : pastbasket["timestamp"].minute}";
 
-    String datetime =  "${pastbasket["timestamp"].day}/${pastbasket["timestamp"].month}/${pastbasket["timestamp"].year}";
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-            side: const BorderSide(color: Colors.black26, width: 2),
+    return Container(
+      margin: const EdgeInsets.only(left: 15, top: 25, right: 15),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 3,
+                blurRadius: 5)
+          ],
+          color: Colors.white),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(datetime,
+                  style:
+                      const TextStyle(color: Colors.deepPurple, fontSize: 15)),
+              Text(
+                "Total : ${(pastbasket["total"].toString())} ₺",
+                style: const TextStyle(
+                    color: Colors.deepPurple,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
+              ),
+            ],
           ),
-          child: InkWell(
-            onTap: () {
-              setState(() {
-                selected = !selected;
-              },
-              );
-            },
-
-            child: Column(
-              children: [
-                const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children:[
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      if (pastbasket["content"].length > 2)
+                        for (int i = 0; i < 2; i++)
+                          _buildimage(pastbasket["content"][i])
+                      else
+                        for (int i = 0; i < pastbasket["content"].length; i++)
+                          _buildimage(pastbasket["content"][i]),
+                      const SizedBox(width: 5,),
                       Text(
-                        "$datetime ",
-                        style:
-                        const TextStyle(color: Colors.deepPurple, fontSize: 15),
-                        textAlign: TextAlign.left,
-                      ),
-                      Text(
-                        "Tutar : ${(pastbasket["total"].toString())} ₺",
+                        (pastbasket["content"].length) > 2
+                            ? "+${pastbasket["content"].length - 2} more"
+                            : "",
                         style: const TextStyle(
                             color: Colors.deepPurple,
-                            fontSize: 16,
+                            fontSize: 15,
                             fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.right,
-                  ),
+                      )
                     ],
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top:10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      for(int i =0; i<2;i++)
-                        _buildimages( pastbasket["content"][i]), //for(final entry in pastbasket["content"]) ,
-                     Text(
-                         (pastbasket["content"].length) > 3
-                             ? "+ ${pastbasket["content"].length -2}"
-                             : " ",
-                       style: const TextStyle(
-                           color: Colors.deepPurple,
-                           fontSize: 14,
-                           fontWeight: FontWeight.bold),)
-                     // if (pastbasket["content"].length)
-
-                    ],
-                  ),
-                ),
-                Padding(
-                    padding: const EdgeInsets.only(right: 2),
-                    child: Row (
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                builder: (context) => pastBasketsDetail(basket: pastbasket)));
-                          },
-                          child: const Padding(
-                        padding: EdgeInsets.all(10.0),
-                            child: Text(
-                              "Detay >>",
-                              style: TextStyle(
-                                  color: Colors.deepPurple,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.right,
-                            ),
-                          ),
-                        )
-                      ],
-                    )
-                ),
-              ],
-            ),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  PastBasketsDetail(basket: pastbasket)));
+                    },
+                    icon: const Icon(Icons.arrow_forward_ios,
+                        color: Colors.deepPurple),
+                  )
+                ]),
           ),
-        ),
+        ],
       ),
     );
   }
 
-
-  Widget _buildimages(Map<String, dynamic> content) {
+  Widget _buildimage(Map<String, dynamic> content) {
     return Container(
       height: 60,
-      width: 80,
+      width: 70,
       decoration: BoxDecoration(
           image: DecorationImage(
               image: (content["product"]["category"].toString() == "search"
-                  ? NetworkImage(
-                  content["product"]["image"].toString())
-                  : AssetImage(
-                  content["product"]["image"].toString()) as ImageProvider),
-              fit: BoxFit.contain)),
+                  ? NetworkImage(content["product"]["image"].toString())
+                  : AssetImage(content["product"]["image"].toString())
+                      as ImageProvider),
+              fit: BoxFit.contain),
+          shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+              color: Colors.deepPurple.withOpacity(0.1),
+              spreadRadius: 3,
+              blurRadius: 3)
+        ],
+      color: Colors.white),
     );
   }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.purple),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: const Icon(Icons.arrow_back),
+          color: Colors.purple,
         ),
         title: const Text(
           "Past Baskets",
@@ -148,17 +126,16 @@ class _pastBaskets extends State<pastBaskets> {
             color: Colors.purple,
           ),
         ),
-        centerTitle: false,
         backgroundColor: Colors.white,
+        elevation: 0,
+        toolbarHeight: 60,
       ),
-
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Expanded(
             child: ListView(
               children: [
-                for(final entry in widget.baskets) _buildCard(entry),
+                for (final basket in widget.baskets) _buildCard(basket),
               ],
             ),
           ),
@@ -167,138 +144,3 @@ class _pastBaskets extends State<pastBaskets> {
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

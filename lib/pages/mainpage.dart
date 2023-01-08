@@ -201,7 +201,12 @@ class _MainpageState extends State<Mainpage> {
       isLoadingActive = true;
     });
 
-    var records = await FirebaseFirestore.instance.collection("past-baskets").where("user",isEqualTo:Auth().currentUser?.uid).orderBy("timestamp",descending: true).limit(3).get();
+    var records = await FirebaseFirestore.instance
+        .collection("past-baskets")
+        .where("user",isEqualTo:Auth().currentUser?.uid)
+        .orderBy("timestamp",descending: true)
+        .limit(3)
+        .get();
 
     var list = records.docs
         .map((record) => {
@@ -339,7 +344,7 @@ class _MainpageState extends State<Mainpage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => pastBaskets(baskets : pastBasketList)),
+                                  builder: (context) => PastBaskets(baskets : pastBasketList)),
                             );
                           },
                           style: ElevatedButton.styleFrom(

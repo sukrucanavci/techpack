@@ -120,7 +120,7 @@ class _CartState extends State<Cart> {
                         fit: BoxFit.contain)),
               ),
               Container(
-                padding: EdgeInsets.only(left: 10),
+                padding: const EdgeInsets.only(left: 10),
                 width: 150,
                 child: Column(
                   children: [
@@ -207,7 +207,6 @@ class _CartState extends State<Cart> {
             style: TextStyle(color: Colors.purple),
           ),
           backgroundColor: Colors.white,
-          toolbarHeight: 60,
           elevation: 0,
         ),
         body: Column(
