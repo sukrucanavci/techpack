@@ -28,18 +28,34 @@ is using for product searching in certain technology stores. Application
 
 ### Sign Up/Login
 
-| Sign Up/Login Screen |
+| Sign Up/Login |
 | ------------- |
-| <img src="https://user-images.githubusercontent.com/86152924/211217972-6587f2f3-40bb-44cb-b93b-32e2191afd4b.jpeg" width="250"> |
+| <img src="https://user-images.githubusercontent.com/86152924/211217972-6587f2f3-40bb-44cb-b93b-32e2191afd4b.jpeg" width="200px"> |
 
 ### Product Searching and Route Creation
 
-| Searching Screen  | Results Screen | Cart Screen | Route Screen |
-| ------------- | ------------- | ------------- | ------------- |
-| <img src="https://user-images.githubusercontent.com/86152924/211218410-571ce878-a9c7-442a-ac88-e884b86d0162.jpeg" width="250" height="600"> | <img src="https://user-images.githubusercontent.com/86152924/211218565-95a0bf35-c672-4ea1-8a79-98532debc1e1.jpeg" width="250" height="600"> | <img src="https://user-images.githubusercontent.com/86152924/211218591-4f1b5d49-a002-4f95-99f3-496748196ba9.jpeg" width="250" height="600">  | <img src="https://user-images.githubusercontent.com/86152924/211218606-2c76c5bb-3c8c-41c1-afa5-7ac4b3b99ac6.jpeg" width="250" height="600">  |
+| Search | Results |
+| ------------- | ------------- |
+| <img src="https://user-images.githubusercontent.com/86152924/211218410-571ce878-a9c7-442a-ac88-e884b86d0162.jpeg" width="200px"> | <img src="https://user-images.githubusercontent.com/86152924/211218565-95a0bf35-c672-4ea1-8a79-98532debc1e1.jpeg" width="200px"> |
+
+| Cart | Route |
+| ------------- | ------------- |
+<img src="https://user-images.githubusercontent.com/86152924/211218591-4f1b5d49-a002-4f95-99f3-496748196ba9.jpeg" width="200px"> | <img src="https://user-images.githubusercontent.com/86152924/211218606-2c76c5bb-3c8c-41c1-afa5-7ac4b3b99ac6.jpeg" width="200px"> |
+
+### Categories and Searching
+
+| Categories | Searching |
+| ------------- | ------------- |
+<img src="https://user-images.githubusercontent.com/86152924/211219751-d76eaf4a-01f6-40b7-add9-385312c7a5aa.jpeg" width="200px"> | <img src="https://user-images.githubusercontent.com/86152924/211219763-1bac4190-7f7c-4424-9e12-5272f136b23d.jpeg" width="200px"> |
+
+### Past Baskets and Past Basket Detail
+
+| P. Baskets | Detail |
+| ------------- | ------------- |
+<img src="https://user-images.githubusercontent.com/86152924/211220083-c1ff945b-5fde-4bd1-ac49-51353425e7ce.jpeg" width="200px"> | <img src="https://user-images.githubusercontent.com/86152924/211220107-9d14cf70-41a8-4d5e-9281-60eaa8d98bbc.jpeg" width="200px"> |
 
 ## Authors
 
 Burak Andarman<br/>
-Şükrü Can Avcı)<br/>
-Fatma Zeynep Çelikten)<br/>
+Şükrü Can Avcı<br/>
+Fatma Zeynep Çelikten<br/>
