@@ -30,7 +30,7 @@ is using for product searching in certain technology stores. Application
 
 | Sign Up/Login Screen  |
 | ------------- |
-| ![1](https://user-images.githubusercontent.com/86152924/211217972-6587f2f3-40bb-44cb-b93b-32e2191afd4b.jpeg) |
+| ![1](https://user-images.githubusercontent.com/86152924/211217972-6587f2f3-40bb-44cb-b93b-32e2191afd4b.jpeg = x250) |
 
 ### Product Searching and Route Creation
 
