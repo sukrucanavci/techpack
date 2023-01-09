@@ -52,7 +52,7 @@ is using for product searching in certain technology stores. Application
 
 | P. Baskets | Detail |
 | ------------- | ------------- |
-<img src="https://user-images.githubusercontent.com/86152924/211220083-c1ff945b-5fde-4bd1-ac49-51353425e7ce.jpeg" width="200px"> | <img src="https://user-images.githubusercontent.com/86152924/211220107-9d14cf70-41a8-4d5e-9281-60eaa8d98bbc.jpeg" width="200px"> |
+<img src="https://user-images.githubusercontent.com/86152924/211220083-c1ff945b-5fde-4bd1-ac49-51353425e7ce.jpeg" width="200px"> | <img src="https://user-images.githubusercontent.com/86152924/211276843-12441d43-94a3-4268-b0a6-95f379d1fc63.jpeg" width="200px"> |
 
 ## Authors
 
