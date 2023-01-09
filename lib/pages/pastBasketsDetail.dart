@@ -108,6 +108,17 @@ class _PastBasketsDetail extends State<PastBasketsDetail> {
                             logoMap[product["product"]["vendor"].toString()]!),
                         fit: BoxFit.contain)),
               ),
+              const SizedBox(
+                height: 5,
+              ),
+              Text(
+                "Quantity : ${product["quantity"]}",
+                style: const TextStyle(
+                    color: Colors.deepPurple,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
             ],
           )
         ],
